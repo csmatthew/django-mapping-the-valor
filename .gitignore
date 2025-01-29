@@ -6,7 +6,8 @@ __pycache__/
 *.py[cod]
 node_modules/
 .github/
+.venv
 cloudinary_python.txt
 personal_notes.txt
-convert_csv_to_json.py
 /blog/fixtures
+check_db.py
