@@ -11,3 +11,4 @@ cloudinary_python.txt
 personal_notes.txt
 /blog/fixtures
 check_db.py
+backup.sql
