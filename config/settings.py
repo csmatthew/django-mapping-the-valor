@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'cloudinary',
     # site apps
     'core',
+    'valor_records',
 ]
 
 # Cloudinary configuration
