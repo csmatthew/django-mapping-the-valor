@@ -1,11 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
-# Import the Valuation model
-from valor_records.models.valuation import (
-    Valuation,
-)
-from . import Deanery, HouseType, ReligiousOrder
+from valor_records.models import Deanery, HouseType, ReligiousOrder
 
 
 class ValorRecord(models.Model):
@@ -26,9 +22,13 @@ class ValorRecord(models.Model):
     # General
     name = models.CharField(max_length=255)
     slug = models.SlugField(unique=True, blank=True)
-    record_type = models.CharField(max_length=255)
+    record_type = models.CharField(max_length=255, choices=TYPE_CHOICES)
     dedication = models.CharField(blank=True, max_length=255, null=True)
-    deanery = models.ForeignKey(Deanery, on_delete=models.CASCADE)
+    deanery = models.ForeignKey(
+        Deanery,
+        on_delete=models.CASCADE,
+        related_name='valor_records'
+    )
     status = models.CharField(
         max_length=10, choices=STATUS_CHOICES, default='pending'
     )
@@ -86,10 +86,6 @@ class ValorRecord(models.Model):
     def __str__(self):
         return self.name
 
-    def get_latest_valuation(self):
-        """Retrieve the latest valuation associated with this record."""
-        return self.valuations.order_by('-date_recorded').first()
-
-    def get_all_valuations(self):
-        """Retrieve all valuations associated with this record."""
-        return self.valuations.all()
+    def get_valuation(self):
+        """Retrieve the valuation associated with this record."""
+        return self.valuation.get_formatted_value()
