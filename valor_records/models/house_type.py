@@ -12,8 +12,8 @@ class HouseType(models.Model):
         (key, value) for key, value in HOUSE_TYPE_CHOICES_DICT.items()
     ]
 
-    house_type = models.CharField(
-        max_length=50, choices=HOUSE_TYPE_CHOICES
+    house_type = models.IntegerField(
+        choices=HOUSE_TYPE_CHOICES
     )
 
     def __str__(self):

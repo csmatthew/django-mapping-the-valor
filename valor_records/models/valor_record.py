@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
-from valor_records.models import Deanery, HouseType, ReligiousOrder
+from valor_records.models import Deanery, ReligiousOrder
+from valor_records.models.house_type import HouseType
 
 
 class ValorRecord(models.Model):
@@ -35,8 +36,11 @@ class ValorRecord(models.Model):
 
     # Monastic
     house_type = models.ForeignKey(
-        HouseType, on_delete=models.SET_NULL, null=True, blank=True,
-        related_name='house_records'
+        HouseType,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='valor_records'
     )
     religious_order = models.ForeignKey(
         ReligiousOrder, on_delete=models.SET_NULL, null=True, blank=True,
