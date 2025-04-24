@@ -78,12 +78,25 @@ class ValorRecord(models.Model):
         if user:
             self.last_edited_by = user
 
+        # Debugging
+        print(f"Record Type: {self.record_type}")
+        print(f"House Type: {self.house_type}")
+        house_type_value = (
+            self.house_type.get_house_type_display()
+            if self.house_type else 'None'
+        )
+        print(f"House Type Value: {house_type_value}")
+
         # Always regenerate the slug based on the current name and record_type
         if self.record_type == 'Monastery' and self.house_type:
-            slug_base = f"{self.name}-{self.house_type.house_type}"
+            slug_base = f"{self.name}-" \
+                        f"{self.house_type.get_house_type_display()}"
         else:
             slug_base = f"{self.name}-{self.record_type}"
+        print(f"Slug Base: {slug_base}")
+
         self.slug = slugify(slug_base)
+        print(f"Generated Slug: {self.slug}")
 
         super().save(*args, **kwargs)
 

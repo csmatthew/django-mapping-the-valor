@@ -1,7 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
+    console.log('admin.js loaded'); // Debugging statement
+
     const recordTypeField = document.querySelector('#id_record_type');
     const houseTypeField = document.querySelector('.field-house_type');
     const religiousOrderField = document.querySelector('.field-religious_order');
+
+    console.log('Fields:', { recordTypeField, houseTypeField, religiousOrderField }); // Debugging statement
 
     if (!recordTypeField || !houseTypeField || !religiousOrderField) {
         console.error('Element not found:', {
@@ -23,9 +27,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Initial check
     toggleFields();
-
-    // Add event listener to record type field
     recordTypeField.addEventListener('change', toggleFields);
 });
