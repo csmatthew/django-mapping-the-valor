@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     # site apps
     'core',
     'valor_records',
+    'mapper',
 ]
 
 # Cloudinary configuration

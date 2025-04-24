@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block additional_css %}
+<link rel="stylesheet" href="{% static 'css/valor-record.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<main class="content">
+    <div class="container"> 
+        <div class="row entry">
+            <div class="col-12 search-return d-flex">
+                <button class="btn btn-default" onclick="window.history.back();">
+                    <i class="fa fa-chevron-left"></i> Back
+                </button>
+            </div>
+        </div>
+        <div class="col-12 col-lg">
+            <article class="record">
+                <table class="table table-bordered table-striped">
+                    <tbody>
+                        <!-- Always visible rows -->
+                        <tr>
+                            <th>Record Name</th>
+                            <td>
+                                {{ valor_record.name }}
+                                {% if valor_record.record_type == 'Monastery' and valor_record.house_type %}
+                                {{ valor_record.house_type.house_type }}
+                                {% else %}
+                                {{ valor_record.record_type }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Record Type</th>
+                            <td>{{ valor_record.record_type }}</td>
+                        </tr>
+                        <tr>
+                            <th>Deanery</th>
+                            <td>{{ valor_record.deanery.deanery_name }}</td>
+                        </tr>
+                        {% if valor_record.house_type %}
+                        <tr>
+                            <th>House Type</th>
+                            <td>{{ valor_record.house_type.house_type }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if valor_record.religious_order %}
+                        <tr>
+                            <th>Religious Order</th>
+                            <td>{{ valor_record.religious_order.get_religious_order_display }}</td>
+                        </tr>
+                        {% endif %}
+
+                        <!-- Initially hidden rows -->
+                        <tr class="hidden-row">
+                            <th>Latitude</th>
+                            <td>{{ valor_record.latitude }}</td>
+                        </tr>
+                        <tr class="hidden-row">
+                            <th>Longitude</th>
+                            <td>{{ valor_record.longitude }}</td>
+                        </tr>
+                        <tr class="hidden-row">
+                            <th>Source Ref. Vol.</th>
+                            <td>{{ valor_record.source_ref_vol }}</td>
+                        </tr>
+                        <tr class="hidden-row">
+                            <th>Source Ref. Page</th>
+                            <td>{{ valor_record.source_ref_page }}</td>
+                        </tr>
+                        <tr class="hidden-row">
+                            <th>Created By</th>
+                            <td>{{ valor_record.created_by.username }}</td>
+                        </tr>
+                        <tr class="hidden-row">
+                            <th>Last Edited By</th>
+                            <td>{{ valor_record.last_edited_by.username }}</td>
+                        </tr>
+                        <tr class="hidden-row">
+                            <th>Date Created</th>
+                            <td>{{ valor_record.date_created }}</td>
+                        </tr>
+                        <tr class="hidden-row">
+                            <th>Date Updated</th>
+                            <td>{{ valor_record.date_updated }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                {% if user.is_authenticated %}
+                <button id="toggle-button" class="btn btn-primary" aria-expanded="false" aria-controls="hidden-rows">
+                    Show More
+                </button>
+                {% endif %}
+            </article>
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        <h3>Valor Texts</h3>
+        {% if valor_texts %}
+            {% for text in valor_texts %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Original Text</h5>
+                    <p class="card-text">{{ text.original_text|safe }}</p>
+                    {% if text.translation %}
+                    <h5 class="card-title">Translation</h5>
+                    <p class="card-text">{{ text.translation|safe }}</p>
+                    {% endif %}
+                    <p class="card-text">
+                        <small class="text-muted">
+                            {% if text.created_by %}
+                                Created by {{ text.created_by.username }}
+                            {% else %}
+                                Creator unknown
+                            {% endif %}
+                            on {{ text.date_created }}
+                        </small>
+                    </p>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No associated texts found for this record.</p>
+        {% endif %}
+    </div>
+    
+
+    {% if user.is_authenticated %}
+    <a href="{% url 'valor_record_update' valor_record.slug %}" class="btn btn-primary">Edit</a>
+    <a href="{% url 'valor_record_delete' valor_record.slug %}" class="btn btn-danger">Delete</a>
+    {% endif %}
+
+</main>
+
+{% include "valor_records/view_card_modal.html" %}
+
+{% endblock %}
+
+{% block additional_scripts %}
+<script src="{% static 'js/valor-record.js' %}"></script>
+{% endblock additional_scripts %}
