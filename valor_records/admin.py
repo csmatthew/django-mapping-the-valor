@@ -50,7 +50,7 @@ class ValorRecordAdmin(admin.ModelAdmin):
     list_display = (
         'name', 'record_type', 'deanery', 'status',
         'date_created', 'date_updated',
-        'get_house_type', 'get_religious_order',
+        'slug',
     )
     search_fields = ('name',)
     list_filter = ('record_type', 'status', 'deanery')

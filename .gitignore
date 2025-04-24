@@ -5,6 +5,7 @@ core.python*
 
 # Ignore environment configuration files
 env.py
+.env
 
 # Ignore virtual environment directories
 .venv/
@@ -12,6 +13,7 @@ env.py
 # Ignore Python cache files
 __pycache__/
 *.py[cod]
+*.pyc
 
 # Ignore Node.js modules
 node_modules/
@@ -25,8 +27,13 @@ convert_csv_to_json.py
 check_db.py
 z_reference_personal/
 
-# Ignore Django static files
-staticfiles/
+# Ignore static files
+/staticfiles/
+**/*.css
+**/*.js
+**/*.svg
+**/*.txt
 
 # Ignore database files with potentially sensitive data
+*.db
 backup.sql
