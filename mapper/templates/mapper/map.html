@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block additional_css %}
+    <!-- Leaflet CSS -->
+    <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" /> -->
+    <link rel="stylesheet" href="{% static 'mapper/css/custom_leaflet.css' %}">
+    <!-- Custom Map CSS --> 
+    <link rel="stylesheet" href="{% static 'mapper/css/map.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>Map</h1>
+<div class="container-fluid pt-5 pb-5 bg-light">
+    <div id="map-container">
+        <div class="map-filter">
+            <label><input type="checkbox" class="record-type-filter" value="Monastery" checked> Monastery</label>
+            <label><input type="checkbox" class="record-type-filter" value="Rectory" checked> Rectory</label>
+            <label><input type="checkbox" class="record-type-filter" value="Collegiate" checked> Collegiate</label>
+            <!-- Add more filters as needed -->
+        </div>
+        <div id="map"></div>
+    </div>
+</div>
+
+{% include "valor_records/view_card_modal.html" %}
+
+{% endblock %}
+
+{% block additional_scripts %}
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <!-- Custom Map JS -->
+    <script src="{% static 'mapper/js/markers.js' %}"></script>
+    <script src="{% static 'mapper/js/map.js' %}"></script>
+{% endblock %}

@@ -34,6 +34,6 @@ z_reference_personal/
 **/*.svg
 **/*.txt
 
-# Ignore database files with potentially sensitive data
+# Ignore database files
 *.db
 backup.sql

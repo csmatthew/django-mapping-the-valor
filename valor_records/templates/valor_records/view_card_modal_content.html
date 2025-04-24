@@ -1,0 +1,57 @@
+{% load custom_filters %}
+
+<button class="btn btn-link" aria-label="View details of valor record" onclick="window.location.href='{% url 'valor_record_detail' valor_record.slug %}'">
+    View detailed record for {{ valor_record.slug|slug_to_title }} <i class="fa fa-link"></i>
+</button>
+
+<div class="col-12 col-lg">
+    <article class="record">
+        <table class="table table-bordered table-striped">
+            <tbody>
+                <tr>
+                    <th>Record Name</th>
+                    <td>
+                        {{ valor_record.name }}
+                        {% if valor_record.record_type == 'Monastery' and valor_record.house_type %}
+                        {{ valor_record.house_type.house_type }}
+                        {% else %}
+                        {{ valor_record.record_type }}
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Record Type</th>
+                    <td>{{ valor_record.record_type }}</td>
+                </tr>
+                <tr>
+                    <th>Dedication</th>
+                    <td>{{ valor_record.dedication }}</td>
+                </tr>
+                <tr>
+                    <th>Deanery</th>
+                    <td>{{ valor_record.deanery.deanery_name }}</td>
+                </tr>
+                {% if valor_record.house_type %}
+                <tr>
+                    <th>House Type</th>
+                    <td>{{ valor_record.house_type.house_type }}</td>
+                </tr>
+                {% endif %}
+                {% if valor_record.religious_order %}
+                <tr>
+                    <th>Religious Order</th>
+                    <td>{{ valor_record.religious_order.get_religious_order_display }}</td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <th>Coordinates</th>
+                    <td>{{ valor_record.latitude }} {{ valor_record.longitude }}</td>
+                </tr>
+                <tr>
+                    <th>Source Reference</th>
+                    <td>vol. {{ valor_record.source_ref_vol }} p. {{ valor_record.source_ref_page }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </article>
+</div>
