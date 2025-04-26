@@ -109,6 +109,17 @@ class ValorRecordAdmin(admin.ModelAdmin):
         )
     approve_records.short_description = "Approve selected records"
 
+    def reject_records(self, request, queryset):
+        updated = queryset.update(status='rejected')
+        self.message_user(
+            request,
+            f"{updated} record(s) successfully rejected.",
+            messages.SUCCESS
+        )
+    reject_records.short_description = "Reject selected records"
+
+    actions = [approve_records, reject_records]
+
 
 @admin.register(HouseType)
 class HouseTypeAdmin(admin.ModelAdmin):
