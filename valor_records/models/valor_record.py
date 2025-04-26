@@ -1,8 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
-from valor_records.models import Deanery, ReligiousOrder
-from valor_records.models.house_type import HouseType
+from valor_records.models import Deanery, ReligiousOrder, HouseType
 
 
 class ValorRecord(models.Model):

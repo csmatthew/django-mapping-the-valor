@@ -3,14 +3,12 @@
 
 {% block additional_css %}
     <!-- Leaflet CSS -->
-    <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" /> -->
-    <link rel="stylesheet" href="{% static 'mapper/css/custom_leaflet.css' %}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <!-- Custom Map CSS --> 
     <link rel="stylesheet" href="{% static 'mapper/css/map.css' %}">
 {% endblock %}
 
 {% block content %}
-<h1>Map</h1>
 <div class="container-fluid pt-5 pb-5 bg-light">
     <div id="map-container">
         <div class="map-filter">
