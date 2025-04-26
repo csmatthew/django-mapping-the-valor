@@ -11,11 +11,10 @@ def valor_records_json(request):
     valor_records = ValorRecord.objects.filter(status='approved')
     data = [
         {
-            'name': record.name,
+            'name': str(record.name) if record.name else None,
             'record_type': record.record_type,
             'house_type': (
-                record.house_type.get_house_type_display()
-                if record.house_type else None
+                str(record.house_type) if record.house_type else None
             ),
             'deanery': record.deanery.deanery_name if record.deanery else None,
             'latitude': record.latitude,
