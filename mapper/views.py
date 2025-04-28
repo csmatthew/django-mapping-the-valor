@@ -5,7 +5,7 @@ from valor_records.models.hierarchy import Deanery
 
 
 def map_view(request):
-    deaneries = Deanery.objects.all()  # Fetch all deaneries
+    deaneries = Deanery.objects.all().order_by('deanery_name')
     return render(request, 'mapper/map.html', {'deaneries': deaneries})
 
 
