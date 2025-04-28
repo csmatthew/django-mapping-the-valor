@@ -1,10 +1,12 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from valor_records.models import ValorRecord
+from valor_records.models.hierarchy import Deanery
 
 
 def map_view(request):
-    return render(request, 'mapper/map.html')
+    deaneries = Deanery.objects.all()  # Fetch all deaneries
+    return render(request, 'mapper/map.html', {'deaneries': deaneries})
 
 
 def valor_records_json(request):

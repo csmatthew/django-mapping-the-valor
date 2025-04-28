@@ -19,7 +19,7 @@ def valor_record_modal(request, slug):
     valor_record = get_object_or_404(ValorRecord, slug=slug, status='approved')
     return render(
         request,
-        'valor_records/view_card_modal_content.html',
+        'mapper/modals/view_card_modal_content.html',
         {'valor_record': valor_record}
     )
 
