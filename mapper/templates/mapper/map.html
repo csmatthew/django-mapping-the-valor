@@ -11,11 +11,16 @@
 {% block content %}
 <div class="container-fluid pt-5 pb-5 bg-light">
     <div id="map-container">
-        <div class="map-filter">
-            <label><input type="checkbox" class="record-type-filter" value="Monastery" checked> Monastery</label>
-            <label><input type="checkbox" class="record-type-filter" value="Rectory" checked> Rectory</label>
-            <label><input type="checkbox" class="record-type-filter" value="Collegiate" checked> Collegiate</label>
-            <!-- Add more filters as needed -->
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="map-filter">
+                <label><input type="checkbox" class="record-type-filter" value="Monastery" checked> Monastery</label>
+                <label><input type="checkbox" class="record-type-filter" value="Rectory" checked> Rectory</label>
+                <label><input type="checkbox" class="record-type-filter" value="Collegiate" checked> Collegiate</label>
+                <!-- Add more filters as needed -->
+            </div>
+            {% if user.is_authenticated %}
+            <button type="button" class="btn btn-primary">Add Entry</button>
+            {% endif %}
         </div>
         <div id="map"></div>
     </div>
