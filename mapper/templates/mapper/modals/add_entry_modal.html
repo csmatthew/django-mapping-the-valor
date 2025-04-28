@@ -1,0 +1,55 @@
+<div class="modal fade" id="addEntryModal" tabindex="-1" aria-labelledby="addEntryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addEntryModalLabel">Add New Valor Record</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addEntryForm">
+                    <div class="mb-3">
+                        <label for="entryName" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="entryName" name="name" placeholder="Enter name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="entryType" class="form-label">Record Type</label>
+                        <select class="form-select" id="entryType" name="record_type" required>
+                            <option value="Monastery">Monastery</option>
+                            <option value="Rectory">Rectory</option>
+                            <option value="Collegiate">Collegiate</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="entryLatitude" class="form-label">Latitude</label>
+                        <input type="number" step="any" class="form-control" id="entryLatitude" name="latitude" placeholder="Enter latitude" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="entryLongitude" class="form-label">Longitude</label>
+                        <input type="number" step="any" class="form-control" id="entryLongitude" name="longitude" placeholder="Enter longitude" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="entryDedication" class="form-label">Dedication</label>
+                        <input type="text" class="form-control" id="entryDedication" name="dedication" placeholder="Enter dedication">
+                    </div>
+                    <div class="mb-3">
+                        <label for="entryDeanery" class="form-label">Deanery</label>
+                        <select class="form-select" id="entryDeanery" name="deanery" required>
+                            {% if deaneries %}
+                                <option value="" disabled selected>Select a deanery</option>
+                                {% for deanery in deaneries %}
+                                    <option value="{{ deanery.deanery_name }}">{{ deanery.deanery_name }}</option>
+                                {% endfor %}
+                            {% else %}
+                                <option value="" disabled>No deaneries available</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="submitEntryBtn" class="btn btn-primary">Submit Entry</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

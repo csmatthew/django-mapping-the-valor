@@ -19,18 +19,27 @@
                 <!-- Add more filters as needed -->
             </div>
             {% if user.is_authenticated %}
-            <button type="button" class="btn btn-primary">Add Entry</button>
+            <button type="button" id="add-entry-btn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addEntryModal">
+                Add Entry
+            </button>
             {% endif %}
         </div>
         <div id="map"></div>
     </div>
 </div>
 
-{% include "valor_records/view_card_modal.html" %}
+{% include "mapper/modals/view_card_modal.html" %}
+{% if user.is_authenticated %}
+{% include "mapper/modals/add_entry_modal.html" %}
+{% endif %}
 
 {% endblock %}
 
 {% block additional_scripts %}
+    <!-- Custom JS -->
+    {% if user.is_authenticated %}
+    <script src="{% static 'mapper/js/add_entry.js' %}"></script>
+    {% endif %}
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <!-- Custom Map JS -->
