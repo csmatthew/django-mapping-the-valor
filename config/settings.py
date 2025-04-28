@@ -181,3 +181,22 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Add this line at the end of the file or in an appropriate section
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',
+    },
+    'django': {
+        'handlers': ['console'],
+        'level': 'ERROR',
+        'propagate': True,
+    },
+}
