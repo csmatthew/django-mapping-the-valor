@@ -1,0 +1,26 @@
+#map {
+    height: 100vh;
+    width: 100%;
+}
+
+/* Ensure the Select2 dropdown displays correctly */
+.select2-container {
+    visibility: visible !important;
+    z-index: 1050; /* Matches Bootstrap modal z-index */
+    width: 100% !important; /* Ensure the dropdown takes the full width of the parent */
+}
+
+.select2-selection {
+    height: 38px !important; /* Match the height of Bootstrap form controls */
+    padding: 6px 12px !important; /* Add padding for better alignment */
+    border: 1px solid #ced4da !important; /* Match Bootstrap border style */
+    border-radius: 4px !important; /* Match Bootstrap border radius */
+}
+
+.select2-selection__rendered {
+    line-height: 24px !important; /* Align text vertically */
+}
+
+.select2-selection__arrow {
+    height: 36px !important; /* Align the dropdown arrow */
+}

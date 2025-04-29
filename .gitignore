@@ -29,10 +29,6 @@ z_reference_personal/
 
 # Ignore static files
 /staticfiles/
-**/*.css
-**/*.js
-**/*.svg
-**/*.txt
 
 # Ignore database files
 *.db
