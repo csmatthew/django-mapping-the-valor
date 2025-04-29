@@ -25,9 +25,9 @@
 <body>
 
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+    <nav class="navbar navbar-expand-lg navbar-light bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'index' %}">
+            <a class="navbar-brand text-light" href="{% url 'index' %}">
                 <span class="brand">Mapping the Valor</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
@@ -37,27 +37,27 @@
             <div class="collapse navbar-collapse" id="navbarText">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link {% if request.path == home_url %}active{% endif %}" aria-current="page"
+                        <a class="nav-link text-light{% if request.path == home_url %} active{% endif %}" aria-current="page"
                             href="{% url 'index' %}">Home</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <span class="navbar-text">Logged in as {{ user.username }}</span>
+                        <span class="navbar-text text-light">Logged in as {{ user.username }}</span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>
+                        <a class="nav-link text-light" href="{% url 'account_logout' %}">Logout</a>
                     </li>
                     {% else %}
                     <li class="nav-item">
-                        <span class="navbar-text">Not Logged In</span>
+                        <span class="navbar-text text-light">Not Logged In</span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'account_signup' %}">Create account</a>
+                        <a class="nav-link text-light" href="{% url 'account_signup' %}">Create account</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'account_login' %}">Log in</a>
+                        <a class="nav-link text-light" href="{% url 'account_login' %}">Log in</a>
                     </li>
                     {% endif %}
                 </ul>
@@ -69,15 +69,18 @@
     <!-- Content Goes here -->
     {% endblock content %}
 
-    <footer class="footer mt-auto py-3 dark-bg">
-        <p class="m-0 text-center text-white">
-            {% block copyright %}MMXXV Christopher Matthew{% endblock copyright %}
+    <footer class="footer mt-auto py-3 bg-dark">
+        <p class="m-0 text-center text-light">
+            {% block copyright %}
+            MMXXV Christopher Matthew
+            {% endblock copyright %}
         </p>
-        <p class="m-0 text-center text-white">Follow us: 
-            <i class="fab fa-facebook-square ms-3"></i>
-            <i class="fab fa-twitter-square ms-3"></i>
-            <i class="fab fa-instagram-square ms-3"></i>
-            <i class="fab fa-youtube-square ms-3"></i>
+        <p class="m-0 text-center text-light">
+            Follow us: 
+            <i class="fab fa-facebook-square ms-3 text-light"></i>
+            <i class="fab fa-twitter-square ms-3 text-light"></i>
+            <i class="fab fa-instagram-square ms-3 text-light"></i>
+            <i class="fab fa-youtube-square ms-3 text-light"></i>
         </p>
     </footer>
 
@@ -88,6 +91,8 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- FontAwesome -->
+    <script src="https://kit.fontawesome.com/645226beaa.js" crossorigin="anonymous"></script>
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <!-- Custom JS -->
