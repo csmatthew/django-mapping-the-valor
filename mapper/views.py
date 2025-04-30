@@ -26,6 +26,16 @@ def valor_records_json(request):
                 record.religious_order.get_religious_order_display()
                 if record.religious_order else None
             ),
+            'valuation': (
+                record.get_raw_value()
+                if hasattr(record, 'get_raw_value')
+                # ref. valuation.py
+                else None
+            ),
+            'decimal_valuation': (
+                record.valuation.convert_to_decimal()
+                if record.valuation else None
+            ),
         }
         for record in valor_records
     ]

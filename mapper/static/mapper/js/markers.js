@@ -61,7 +61,9 @@ function createMarkers(map, data) {
             }
             let popupContent = `<b>${name}</b><br>
                                 Record Type: ${record.record_type}<br>
-                                Deanery: ${record.deanery}<br>`;
+                                Deanery: ${record.deanery}<br>
+                                Valuation: ${record.valuation}<br>
+                                Valuation (Decimal): ${record.decimal_valuation}`;
             if (record.religious_order) {
                 popupContent += `Religious Order: ${record.religious_order}<br>`;
             }

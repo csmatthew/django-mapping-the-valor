@@ -32,7 +32,8 @@ class DeaneryAdmin(admin.ModelAdmin):
 class ValuationInline(admin.StackedInline):
     model = Valuation
     extra = 0  # No extra empty forms
-    fields = ('pounds', 'shillings', 'pence')
+    fields = ('raw_pounds', 'raw_shillings', 'raw_pence')
+    # Show value input as displayed in the printed record
 
 
 @admin.display(description='House Type')
@@ -48,10 +49,11 @@ def get_religious_order(self, obj):
 @admin.register(ValorRecord)
 class ValorRecordAdmin(admin.ModelAdmin):
     list_display = (
-        'name', 'record_type', 'deanery', 'status',
+        'name', 'record_type', 'valuation', 'deanery', 'status',
         'date_created', 'date_updated',
         'slug',
     )
+    # 'valuation' is referencing the normalised amount
     search_fields = ('name',)
     list_filter = ('record_type', 'status', 'deanery')
     ordering = ('date_created',)
