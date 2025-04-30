@@ -102,6 +102,6 @@ class ValorRecord(models.Model):
     def __str__(self):
         return self.name
 
-    def get_valuation(self):
+    def get_raw_value(self):
         """Retrieve the valuation associated with this record."""
-        return self.valuation.get_formatted_value()
+        return self.valuation.get_raw_value()
