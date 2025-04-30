@@ -80,16 +80,13 @@ class ValorRecord(models.Model):
         # Debugging
         print(f"Record Type: {self.record_type}")
         print(f"House Type: {self.house_type}")
-        house_type_value = (
-            self.house_type.get_house_type_display()
-            if self.house_type else 'None'
-        )
+
+        house_type_value = str(self.house_type) if self.house_type else 'None'
         print(f"House Type Value: {house_type_value}")
 
         # Always regenerate the slug based on the current name and record_type
         if self.record_type == 'Monastery' and self.house_type:
-            slug_base = f"{self.name}-" \
-                        f"{self.house_type.get_house_type_display()}"
+            slug_base = f"{self.name}-{self.house_type.house_type}"
         else:
             slug_base = f"{self.name}-{self.record_type}"
         print(f"Slug Base: {slug_base}")

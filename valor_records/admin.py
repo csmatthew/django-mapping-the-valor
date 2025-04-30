@@ -36,16 +36,6 @@ class ValuationInline(admin.StackedInline):
     # Show value input as displayed in the printed record
 
 
-@admin.display(description='House Type')
-def get_house_type(self, obj):
-    return str(obj.house_type) if obj.house_type else None
-
-
-@admin.display(description='Religious Order')
-def get_religious_order(self, obj):
-    return str(obj.religious_order) if obj.religious_order else None
-
-
 @admin.register(ValorRecord)
 class ValorRecordAdmin(admin.ModelAdmin):
     list_display = (
@@ -55,7 +45,7 @@ class ValorRecordAdmin(admin.ModelAdmin):
     )
     # 'valuation' is referencing the normalised amount
     search_fields = ('name',)
-    list_filter = ('record_type', 'status', 'deanery')
+    list_filter = ('record_type', 'status', 'deanery', 'house_type',)
     ordering = ('date_created',)
     inlines = [ValuationInline]
     fieldsets = (
@@ -94,10 +84,6 @@ class ValorRecordAdmin(admin.ModelAdmin):
             form.base_fields['status'].disabled = True
         return form
 
-    def get_house_type(self, obj):
-        return str(obj.house_type) if obj.house_type else None
-    get_house_type.short_description = 'House Type'
-
     def get_religious_order(self, obj):
         return str(obj.religious_order) if obj.religious_order else None
     get_religious_order.short_description = 'Religious Order'
@@ -126,6 +112,7 @@ class ValorRecordAdmin(admin.ModelAdmin):
 @admin.register(HouseType)
 class HouseTypeAdmin(admin.ModelAdmin):
     list_display = ('house_type',)
+    search_fields = ('house_type',)
 
 
 @admin.register(ReligiousOrder)
