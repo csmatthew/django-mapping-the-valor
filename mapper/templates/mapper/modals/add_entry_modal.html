@@ -30,6 +30,24 @@
                         </select>
                     </div>
                     <div class="mb-3">
+                        <label for="entryHouseType" class="form-label">House Type</label>
+                        <select class="form-select" id="entryHouseType" name="house_type">
+                            <option value="">Select House Type</option>
+                            {% for house_type in house_types %}
+                                <option value="{{ house_type.id }}">{{ house_type.house_type }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="entryReligiousOrder" class="form-label">Religious Order</label>
+                        <select class="form-select" id="entryReligiousOrder" name="religious_order">
+                            <option value="">Select Religious Order</option>
+                            {% for religious_order in religious_orders %}
+                                <option value="{{ religious_order.id }}">{{ religious_order.religious_order }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
                         <label class="form-label">Coordinates</label>
                         <div class="input-group">
                             <input type="number" step="any" class="form-control" id="entryLatitude" name="latitude" placeholder="Enter latitude" required>
