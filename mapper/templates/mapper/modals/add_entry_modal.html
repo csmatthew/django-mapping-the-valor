@@ -7,10 +7,19 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="addEntryForm">
+                <form id="addEntryForm" action="{% url 'add_valor_record' %}" method="POST">
+                    {% csrf_token %}
                     <div class="mb-3">
                         <label for="entryName" class="form-label">Name</label>
                         <input type="text" class="form-control" id="entryName" name="name" placeholder="Enter name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="entryDeanery" class="form-label">Deanery</label>
+                        <select class="form-control" id="entryDeanery" name="deanery" required>
+                            {% for deanery in deaneries %}
+                                <option value="{{ deanery.id }}">{{ deanery.deanery_name }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="entryType" class="form-label">Record Type</label>
@@ -21,30 +30,29 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="entryLatitude" class="form-label">Latitude</label>
-                        <input type="number" step="any" class="form-control" id="entryLatitude" name="latitude" placeholder="Enter latitude" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="entryLongitude" class="form-label">Longitude</label>
-                        <input type="number" step="any" class="form-control" id="entryLongitude" name="longitude" placeholder="Enter longitude" required>
+                        <label class="form-label">Coordinates</label>
+                        <div class="input-group">
+                            <input type="number" step="any" class="form-control" id="entryLatitude" name="latitude" placeholder="Enter latitude" required>
+                            <input type="number" step="any" class="form-control" id="entryLongitude" name="longitude" placeholder="Enter longitude" required>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="entryDedication" class="form-label">Dedication</label>
                         <input type="text" class="form-control" id="entryDedication" name="dedication" placeholder="Enter dedication">
                     </div>
                     <div class="mb-3">
-                        <label for="entryDeanery" class="form-label">Deanery</label>
-                        <select class="form-control js-example-tags" id="entryDeanery" name="deanery" required>
-                            {% for deanery in deaneries %}
-                                <option value="{{ deanery.deanery_name }}">{{ deanery.deanery_name }}</option>
-                            {% endfor %}
-                        </select>
+                        <label class="form-label">Valuation</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="entryPounds" name="valuation_pounds" placeholder="Enter £">
+                            <input type="number" class="form-control" id="entryShillings" name="valuation_shillings" placeholder="Enter s.">
+                            <input type="number" class="form-control" id="entryPence" name="valuation_pence" placeholder="Enter d.">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" id="submitEntryBtn" class="btn btn-primary">Submit Entry</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     </div>
                 </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="submitEntryBtn" class="btn btn-primary">Submit Entry</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

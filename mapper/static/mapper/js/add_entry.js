@@ -34,59 +34,47 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Handle form submission
-    const submitEntryBtn = document.getElementById("submitEntryBtn");
-    if (submitEntryBtn) {
-        submitEntryBtn.addEventListener("click", function () {
-            const form = document.getElementById("addEntryForm");
+    const form = document.getElementById("addEntryForm");
+    if (form) {
+        form.addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent default form submission
 
-            // Validate deanery selection
-            const deanery = form.entryDeanery.value;
-            if (!deanery) {
-                alert("Please select a valid deanery.");
-                return;
-            }
-
-            // Gather form data
             const formData = {
                 name: form.entryName.value,
                 record_type: form.entryType.value,
                 latitude: form.entryLatitude.value,
                 longitude: form.entryLongitude.value,
                 dedication: form.entryDedication.value,
-                deanery: deanery, // Pass the deanery name
+                deanery: form.entryDeanery.value,
+                pounds: form.entryPounds.value,
+                shillings: form.entryShillings.value,
+                pence: form.entryPence.value,
             };
 
-            // Send the data to the backend via an AJAX request
-            fetch("/valor-records/add/", {
+
+            fetch(form.action, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "X-CSRFToken": getCookie("csrftoken"), // Include CSRF token for Django
+                    "X-CSRFToken": getCookie("csrftoken"), // Include CSRF token
                 },
                 body: JSON.stringify(formData),
             })
-                .then(response => response.json())
-                .then(data => {
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then((data) => {
                     if (data.success) {
                         alert(data.message);
-                        location.reload(); // Reload the page to reflect the new record
+                        location.reload(); // Reload the page to reflect changes
                     } else {
                         alert(data.message);
                     }
                 })
-                .catch(error => console.error("Error adding entry:", error));
+                .catch((error) => console.error("Error adding entry:", error));
         });
-    }
-
-
-    const deaneryDropdown = document.getElementById("entryDeanery");
-    if (deaneryDropdown) {
-        console.log("Deanery dropdown found:", deaneryDropdown);
-
-        // Log the options in the dropdown
-        const options = deaneryDropdown.options;
-        for (let i = 0; i < options.length; i++) {
-            console.log("Option:", options[i].value, options[i].text);
-        }
     }
 });

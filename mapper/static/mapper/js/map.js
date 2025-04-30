@@ -1,9 +1,6 @@
-console.log('map.js loaded');
-
 let map; // Define map variable globally
 
 document.addEventListener('DOMContentLoaded', function () {
-    console.log('DOM fully loaded and parsed');
     var mapContainer = document.getElementById('map');
 
     if (mapContainer && !mapContainer._leaflet_map) {
@@ -19,7 +16,6 @@ document.addEventListener('DOMContentLoaded', function () {
             zoomControl: false // Disable the default zoom control
         });
         mapContainer._leaflet_map = map;
-        console.log('Map initialized:', map);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
@@ -34,7 +30,6 @@ document.addEventListener('DOMContentLoaded', function () {
         fetch('/map/valor-records/')
             .then(response => response.json())
             .then(data => {
-                console.log('Valor Records:', data); // Log the data to verify the response
                 createMarkers(map, data); // Use the createMarkers function from markers.js
                 filterMarkers(); // Apply initial filter
             })

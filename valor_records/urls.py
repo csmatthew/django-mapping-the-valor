@@ -5,9 +5,22 @@ from .views import (
     ValorRecordCreateView,
     ValorRecordUpdateView,
     ValorRecordDeleteView,
+    add_valor_record,
 )
 
 urlpatterns = [
+    # Ensure 'add/' is listed before any dynamic slug-based routes
+    path(
+        'add/', add_valor_record,
+        name='add_valor_record'
+    ),
+    path(
+        'create/',
+        ValorRecordCreateView.as_view(),
+        name='valor_record_create'
+    ),
+
+    # Dynamic detail pages, should come last to prevent incorrect matches
     path(
         '<slug:slug>/',
         valor_record_detail,
@@ -17,11 +30,6 @@ urlpatterns = [
         '<slug:slug>/modal/',
         valor_record_modal,
         name='valor_record_modal'
-    ),
-    path(
-        'create/',
-        ValorRecordCreateView.as_view(),
-        name='valor_record_create'
     ),
     path(
         '<slug:slug>/update/',
