@@ -1,10 +1,9 @@
 from django.contrib import admin, messages
-from valor_records.models.hierarchy import Diocese, Archdeaconry, Deanery
-from valor_records.models.valor_record import ValorRecord
-from valor_records.models.valuation import Valuation
-from valor_records.models.religious_order import ReligiousOrder
-from valor_records.models.house_type import HouseType
-from valor_records.models.record_type import RecordType
+from .models import (
+    Diocese, Archdeaconry, Deanery,
+    ValorRecord, Valuation, ReligiousOrder,
+    HouseType, RecordType
+)
 
 
 @admin.register(Diocese)
@@ -120,3 +119,30 @@ class ReligiousOrderAdmin(admin.ModelAdmin):
 @admin.register(RecordType)
 class RecordTypeAdmin(admin.ModelAdmin):
     list_display = ('record_type',)
+
+
+@admin.register(Valuation)
+class ValuationAdmin(admin.ModelAdmin):
+    list_display = (
+        'get_slug',
+        'get_formatted_value',
+        'get_raw_value',
+        'convert_to_decimal',
+    )
+    fields = ('valor_record', 'raw_pounds', 'raw_shillings', 'raw_pence')
+
+    def get_slug(self, obj):
+        return obj.valor_record.slug if obj.valor_record else "No Slug"
+    get_slug.short_description = 'Record Slug'
+
+    def get_formatted_value(self, obj):
+        return obj.get_formatted_value()
+    get_formatted_value.short_description = 'Valuation'
+
+    def get_raw_value(self, obj):
+        return obj.get_raw_value()
+    get_raw_value.short_description = 'As in Record'
+
+    def convert_to_decimal(self, obj):
+        return obj.convert_to_decimal()
+    convert_to_decimal.short_description = 'Decimalised'
