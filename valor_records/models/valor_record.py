@@ -1,17 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
-from valor_records.models import Deanery, ReligiousOrder, HouseType
+from valor_records.models import RecordType, Deanery, ReligiousOrder, HouseType
 
 
 class ValorRecord(models.Model):
-    TYPE_CHOICES_DICT = {
-        'Monastery': 'Monastery',
-        'Collegiate': 'Collegiate',
-        'Rectory': 'Rectory',
-    }
-
-    TYPE_CHOICES = [(key, value) for key, value in TYPE_CHOICES_DICT.items()]
 
     STATUS_CHOICES = [
         ('pending', 'Pending'),
@@ -22,7 +15,11 @@ class ValorRecord(models.Model):
     # General
     name = models.CharField(max_length=255)
     slug = models.SlugField(unique=True, blank=True)
-    record_type = models.CharField(max_length=255, choices=TYPE_CHOICES)
+    record_type = models.ForeignKey(
+        RecordType,
+        on_delete=models.CASCADE,
+        related_name='valor_records'
+    )
     dedication = models.CharField(blank=True, max_length=255, null=True)
     deanery = models.ForeignKey(
         Deanery,

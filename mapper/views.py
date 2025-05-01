@@ -21,7 +21,9 @@ def valor_records_json(request):
     data = [
         {
             'name': str(record.name) if record.name else None,
-            'record_type': record.record_type,
+            'record_type': (
+                record.record_type.record_type if record.record_type else None
+            ),
             'house_type': (
                 record.house_type.house_type if record.house_type else None
             ),
