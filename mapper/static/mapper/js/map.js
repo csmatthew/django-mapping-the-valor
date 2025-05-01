@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => response.json())
             .then(data => {
                 createMarkers(map, data); // Use the createMarkers function from markers.js
-                filterMarkers(); // Apply initial filter
+                // filterMarkers(); // Apply initial filter
             })
             .catch(error => console.error('Error fetching valor records:', error));
     }
