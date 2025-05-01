@@ -13,10 +13,10 @@
                     <th>Record Name</th>
                     <td>
                         {{ valor_record.name }}
-                        {% if valor_record.record_type == 'Monastery' and valor_record.house_type %}
-                        {{ valor_record.house_type.get_house_type_display }}
+                        {% if valor_record.record_type.record_type == 'Monastery' and valor_record.house_type %}
+                            {{ valor_record.house_type.house_type }}
                         {% else %}
-                        {{ valor_record.record_type }}
+                            {{ valor_record.record_type.record_type }}
                         {% endif %}
                     </td>
                 </tr>
