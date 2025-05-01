@@ -37,15 +37,24 @@ class Valuation(models.Model):
         return f"£{decimal_value:.2f}"
 
     def save(self, *args, **kwargs):
-        # Preserve raw entries before normalizing
-        self.raw_pounds = self.pounds
-        self.raw_shillings = self.shillings
-        self.raw_pence = self.pence
+        print(
+            f"Raw Values: {self.raw_pounds} pounds, "
+            f"{self.raw_shillings} shillings, {self.raw_pence} pence"
+        )
 
-        # Normalize values
-        self.pounds += self.shillings // 20
-        self.shillings = self.shillings % 20
-        self.shillings += self.pence // 12
-        self.pence = self.pence % 12
+        # Normalize values based on raw inputs
+        total_pence = (
+            (self.raw_pounds * 240) +
+            (self.raw_shillings * 12) +
+            self.raw_pence
+        )
+        self.pounds = total_pence // 240
+        remaining_pence = total_pence % 240
+        self.shillings = remaining_pence // 12
+        self.pence = remaining_pence % 12
 
+        print(
+            f"Normalized Values: {self.pounds} pounds, "
+            f"{self.shillings} shillings, {self.pence} pence"
+        )
         super().save(*args, **kwargs)
