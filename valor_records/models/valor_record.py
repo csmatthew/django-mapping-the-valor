@@ -67,6 +67,44 @@ class ValorRecord(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
 
+    # Check for duplicates and append an incremental number if necessary
+    def generate_unique_slug(self):
+        # Determine the base slug based on the record type and house type
+        record_type_value = (
+            self.record_type.record_type if self.record_type else 'None'
+        )
+        house_type_value = (
+            self.house_type.house_type if self.house_type else 'None'
+        )
+
+        if record_type_value == 'Monastery' and self.house_type:
+            base_slug = slugify(f"{self.name}-{house_type_value}")
+        else:
+            base_slug = slugify(f"{self.name}-{record_type_value}")
+
+        slug = base_slug
+        ModelClass = self.__class__
+        counter = 1
+
+        # Fetch existing slugs that start with the same base
+        existing_slugs = list(
+            ModelClass.objects.filter(
+                slug__startswith=base_slug
+            ).values_list('slug', flat=True)
+        )
+
+        # Debugging output
+        print(f"Base Slug: {base_slug}")
+        print(f"Existing Slugs: {existing_slugs}")
+
+        # Append an incremental number if a duplicate slug exists
+        while slug in existing_slugs:
+            slug = f"{base_slug}-{counter}"
+            counter += 1
+
+        print(f"Final Generated Slug: {slug}")
+        return slug
+
     def save(self, *args, **kwargs):
         user = kwargs.pop('user', None)
         if not self.pk and user:
@@ -74,31 +112,20 @@ class ValorRecord(models.Model):
         if user:
             self.last_edited_by = user
 
-        # Debugging
-        print(f"Record Type: {self.record_type}")
-        print(f"House Type: {self.house_type}")
+        # Ensure slug uniqueness only when first creating an object
+        if not self.slug:
+            self.slug = self.generate_unique_slug()
 
-        # Get the value of the record_type and house_type
-        record_type_value = (
-            self.record_type.record_type
-            if self.record_type else 'None'
-        )
-        house_type_value = (
-            self.house_type.house_type
-            if self.house_type else 'None'
-        )
-        print(f"Record Type Value: {record_type_value}")
-        print(f"House Type Value: {house_type_value}")
-
-        # Always regenerate the slug based on the current name and record_type
-        if record_type_value == 'Monastery' and self.house_type:
-            slug_base = f"{self.name}-{self.house_type.house_type}"
-        else:
-            slug_base = f"{self.name}-{record_type_value}"
-        print(f"Slug Base: {slug_base}")
-
-        self.slug = slugify(slug_base)
-        print(f"Generated Slug: {self.slug}")
+        # Regenerate the slug only if the name, record_type,
+        # or house_type has changed
+        if self.pk:
+            original = self.__class__.objects.get(pk=self.pk)
+            if (
+                original.name != self.name or
+                original.record_type != self.record_type or
+                original.house_type != self.house_type
+            ):
+                self.slug = self.generate_unique_slug()
 
         super().save(*args, **kwargs)
 
