@@ -20,7 +20,7 @@ def valor_records_json(request):
     valor_records = ValorRecord.objects.filter(status='approved')
     data = [
         {
-            'name': str(record.name) if record.name else None,
+            'name': record.name or None,
             'record_type': (
                 record.record_type.record_type if record.record_type else None
             ),
@@ -33,18 +33,17 @@ def valor_records_json(request):
             'slug': record.slug,
             'religious_order': (
                 record.religious_order.religious_order
-                if record.religious_order
-                else None
+                if record.religious_order else None
             ),
             'valuation': (
-                record.get_raw_value()
-                if hasattr(record, 'get_raw_value')
-                # ref. valuation.py
+                record.valuation.get_raw_value()
+                if hasattr(record, 'valuation') and record.valuation
                 else None
             ),
             'decimal_valuation': (
                 record.valuation.convert_to_decimal()
-                if record.valuation else None
+                if hasattr(record, 'valuation') and record.valuation
+                else None
             ),
         }
         for record in valor_records
