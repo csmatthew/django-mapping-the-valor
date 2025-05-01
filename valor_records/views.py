@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, UpdateView, DeleteView
 from django.http import JsonResponse
 from django.db import transaction
-from .models import ValorRecord, Valuation, Deanery
+from .models import ValorRecord, Valuation, Deanery, RecordType
 from .forms import ValorRecordForm
 import json
 import logging
@@ -86,6 +86,21 @@ def add_valor_record(request):
                 status=400
             )
 
+        # Validate and retrieve record type
+        record_type = data.get("record_type")
+        logger.info(f"Record type received: {record_type}")
+        try:
+            record_type = RecordType.objects.get(pk=record_type)
+        except RecordType.DoesNotExist:
+            logger.warning(f"Record Type '{record_type}' not found.")
+            return JsonResponse(
+                {
+                    "success": False,
+                    "message": f"Record Type '{record_type}' not found."
+                },
+                status=400
+            )
+
         # Safely parse and cast latitude/longitude
         try:
             latitude = float(data.get("latitude"))
@@ -110,7 +125,7 @@ def add_valor_record(request):
             # Create ValorRecord entry
             valor_record = ValorRecord.objects.create(
                 name=data.get("name"),
-                record_type=data.get("record_type"),
+                record_type=record_type,
                 latitude=latitude,
                 longitude=longitude,
                 dedication=data.get("dedication"),
