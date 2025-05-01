@@ -4,6 +4,7 @@ from valor_records.models.valor_record import ValorRecord
 from valor_records.models.valuation import Valuation
 from valor_records.models.religious_order import ReligiousOrder
 from valor_records.models.house_type import HouseType
+from valor_records.models.record_type import RecordType
 
 
 @admin.register(Diocese)
@@ -84,10 +85,6 @@ class ValorRecordAdmin(admin.ModelAdmin):
             form.base_fields['status'].disabled = True
         return form
 
-    def get_religious_order(self, obj):
-        return str(obj.religious_order) if obj.religious_order else None
-    get_religious_order.short_description = 'Religious Order'
-
     def approve_records(self, request, queryset):
         updated = queryset.update(status='approved')
         self.message_user(
@@ -118,3 +115,8 @@ class HouseTypeAdmin(admin.ModelAdmin):
 @admin.register(ReligiousOrder)
 class ReligiousOrderAdmin(admin.ModelAdmin):
     list_display = ('religious_order',)
+
+
+@admin.register(RecordType)
+class RecordTypeAdmin(admin.ModelAdmin):
+    list_display = ('record_type',)

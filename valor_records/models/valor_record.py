@@ -78,14 +78,23 @@ class ValorRecord(models.Model):
         print(f"Record Type: {self.record_type}")
         print(f"House Type: {self.house_type}")
 
-        house_type_value = str(self.house_type) if self.house_type else 'None'
+        # Get the value of the record_type and house_type
+        record_type_value = (
+            self.record_type.record_type
+            if self.record_type else 'None'
+        )
+        house_type_value = (
+            self.house_type.house_type
+            if self.house_type else 'None'
+        )
+        print(f"Record Type Value: {record_type_value}")
         print(f"House Type Value: {house_type_value}")
 
         # Always regenerate the slug based on the current name and record_type
-        if self.record_type == 'Monastery' and self.house_type:
+        if record_type_value == 'Monastery' and self.house_type:
             slug_base = f"{self.name}-{self.house_type.house_type}"
         else:
-            slug_base = f"{self.name}-{self.record_type}"
+            slug_base = f"{self.name}-{record_type_value}"
         print(f"Slug Base: {slug_base}")
 
         self.slug = slugify(slug_base)

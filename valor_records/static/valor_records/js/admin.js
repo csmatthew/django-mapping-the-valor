@@ -18,7 +18,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function toggleFields() {
         console.log('toggleFields called');
-        if (recordTypeField.value === 'Monastery') {
+        const selectedText = recordTypeField.options[recordTypeField.selectedIndex].text;
+        if (selectedText === 'Monastery') { // display human-readable text
             houseTypeField.style.display = '';
             religiousOrderField.style.display = '';
         } else {
