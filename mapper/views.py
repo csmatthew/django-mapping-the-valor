@@ -1,17 +1,20 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from valor_records.models import ValorRecord, HouseType, ReligiousOrder
-from valor_records.models.hierarchy import Deanery
+from valor_records.models import (
+    ValorRecord, Deanery, HouseType, RecordType, ReligiousOrder
+)
 
 
 def map_view(request):
     deaneries = Deanery.objects.all().order_by('deanery_name')
     house_types = HouseType.objects.all()
+    record_types = RecordType.objects.all().order_by('record_type')
     religious_orders = ReligiousOrder.objects.all()
 
     return render(request, 'mapper/map.html', {
         'deaneries': deaneries,
         'house_types': house_types,
+        'record_types': record_types,
         'religious_orders': religious_orders,
         })
 
