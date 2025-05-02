@@ -41,16 +41,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const formData = {
                 name: form.entryName.value,
-                record_type: form.entryType.value,
+                deanery: form.entryDeanery.value,
+                record_type: form.entryRecordType.value,
+                house_type: form.entryHouseType.value,
+                religious_order: form.entryReligiousOrder.value,
                 latitude: form.entryLatitude.value,
                 longitude: form.entryLongitude.value,
                 dedication: form.entryDedication.value,
-                deanery: form.entryDeanery.value,
-                pounds: form.entryPounds.value,
-                shillings: form.entryShillings.value,
-                pence: form.entryPence.value,
+                entry_pounds: form.entryPounds.value,
+                entry_shillings: form.entryShillings.value,
+                entry_pence: form.entryPence.value,
             };
-
 
             fetch(form.action, {
                 method: "POST",
@@ -77,4 +78,28 @@ document.addEventListener("DOMContentLoaded", function () {
                 .catch((error) => console.error("Error adding entry:", error));
         });
     }
+
+    // Conditional visibility of fields for religious entries
+    const recordTypeField = $("#entryRecordType"); // Use jQuery to target the Select2 element
+    const houseTypeField = document.getElementById("houseTypeField");
+    const religiousOrderField = document.getElementById("religiousOrderField");
+
+    function toggleFields() {
+        const selectedOption = recordTypeField.val(); // Get the selected value using Select2's API
+        const selectedText = recordTypeField.find("option:selected").text(); // Get the selected text
+
+        if (selectedText === "Monastery") {
+            houseTypeField.style.display = "block";
+            religiousOrderField.style.display = "block";
+        } else {
+            houseTypeField.style.display = "none";
+            religiousOrderField.style.display = "none";
+        }
+    }
+
+    // Initialize visibility on page load
+    toggleFields();
+
+    // Add event listener to toggle visibility on change
+    recordTypeField.on("change", toggleFields); // Use Select2's change event
 });
