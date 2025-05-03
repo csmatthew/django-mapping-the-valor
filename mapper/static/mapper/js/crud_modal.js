@@ -12,7 +12,7 @@ function openCrudModal(slug) {
             $("#crudModal").modal("show");
 
             // Fetch and populate the modal content
-            return fetch(`/mapper/modal/${slug}/read/`);
+            return fetch(`/mapper/valor-records/?slug=${slug}`);
         })
         .then(response => response.json()) // Parse the JSON response
         .then(data => {
@@ -20,11 +20,28 @@ function openCrudModal(slug) {
             if (modalContent) {
                 // Inject the JSON data into the modal fields
                 modalContent.innerHTML = `
-                    <p><strong>Record Name:</strong> ${data.name}</p>
-                    <p><strong>Record Type:</strong> ${data.record_type}</p>
-                    <p><strong>Deanery:</strong> ${data.deanery}</p>
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th>Record Name</th>
+                            <td>${data.name} ${data.record_type}</td>
+                        </tr>
+                        <tr>
+                            <th>Deanery</th>
+                            <td>${data.deanery}</td>
+                        </tr>
+                        <tr>
+                            <th>Dedication</th>
+                            <td>${data.dedication ?? "Unknown"}</td>
+                        </tr>
+                        <tr>
+                            <th>Valuation</th>
+                            <td>${data.valuation ?? "Not provided"}</td>
+                        </tr>
+                    </table>
                 `;
             }
         })
-        .catch(error => console.error("Error loading modal:", error));
+        .catch(error => {
+            console.error(`Error loading modal: ${error.message}`);
+        });
 }
