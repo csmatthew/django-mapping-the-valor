@@ -128,14 +128,8 @@
     </div>
     
 
-    {% if user.is_authenticated %}
-    <a href="{% url 'valor_record_update' valor_record.slug %}" class="btn btn-primary">Edit</a>
-    <a href="{% url 'valor_record_delete' valor_record.slug %}" class="btn btn-danger">Delete</a>
-    {% endif %}
-
 </main>
 
-{% include "mapper/modals/view_card_modal.html" %}
 
 {% endblock %}
 
