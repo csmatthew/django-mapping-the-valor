@@ -16,6 +16,11 @@ function openCrudModal(slug) {
         })
         .then(response => response.json()) // Parse the JSON response
         .then(data => {
+            let modalTitle = document.getElementById("modalTitle");
+            if (modalTitle) {
+                // Inject the JSON data into the modal title
+                modalTitle.textContent = `Record for ${data.name} ${data.record_type}`;
+            }
             let modalContent = document.getElementById("modalContent");
             if (modalContent) {
                 // Inject the JSON data into the modal fields
@@ -36,6 +41,10 @@ function openCrudModal(slug) {
                         <tr>
                             <th>Valuation</th>
                             <td>${data.valuation ?? "Not provided"}</td>
+                        </tr>
+                        <tr>
+                            <th>Coordinates</th>
+                            <td>${data.latitude}, ${data.longitude}</td>
                         </tr>
                     </table>
                 `;

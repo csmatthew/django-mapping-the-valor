@@ -34,6 +34,8 @@ def valor_records_json(request):
                 "deanery": record.deanery.deanery_name if record.deanery else None,
                 "dedication": record.dedication or "Unknown",
                 "valuation": record.valuation.get_formatted_value() if hasattr(record, "valuation") and record.valuation else "Not provided",
+                "latitude": record.latitude,
+                "longitude": record.longitude,
             }
             return JsonResponse(data)  # Return a single record as a JSON object
         else:

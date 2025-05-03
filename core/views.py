@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 from valor_records.models.valor_record import ValorRecord, ReligiousOrder
 
@@ -31,4 +31,15 @@ def search_view(request):
         request,
         'core/search_results.html',
         {'query': query, 'results': results}
+    )
+
+
+def valor_record_detail(request, slug):
+    valor_record = get_object_or_404(ValorRecord, slug=slug)
+    return render(
+        request,
+        'core/valor_record_detail.html',
+        {
+            'valor_record': valor_record
+        }
     )
