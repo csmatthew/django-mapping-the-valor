@@ -30,31 +30,56 @@ def valor_records_json(request):
             record = get_object_or_404(ValorRecord, slug=slug)
             data = {
                 "name": record.name,
-                "record_type": record.record_type.record_type if record.record_type else None,
-                "deanery": record.deanery.deanery_name if record.deanery else None,
+                "record_type": (
+                    record.record_type.record_type
+                    if record.record_type
+                    else None
+                ),
+                "deanery": (
+                    record.deanery.deanery_name if record.deanery else None
+                ),
                 "dedication": record.dedication or "Unknown",
-                "valuation": record.valuation.get_formatted_value() if hasattr(record, "valuation") and record.valuation else "Not provided",
+                "valuation": (
+                    record.valuation.get_formatted_value()
+                    if hasattr(record, "valuation") and record.valuation
+                    else "Not provided"
+                ),
                 "latitude": record.latitude,
                 "longitude": record.longitude,
+                "slug": record.slug,
             }
-            return JsonResponse(data)  # Return a single record as a JSON object
+            return JsonResponse(data)
         else:
             # Fetch all records
             records = ValorRecord.objects.all()
             data = [
                 {
                     "name": record.name,
-                    "record_type": record.record_type.record_type if record.record_type else None,
-                    "deanery": record.deanery.deanery_name if record.deanery else None,
+                    "record_type": (
+                        record.record_type.record_type
+                        if record.record_type
+                        else None
+                    ),
+                    "deanery": (
+                        record.deanery.deanery_name if record.deanery else None
+                    ),
                     "latitude": record.latitude,
                     "longitude": record.longitude,
                     "slug": record.slug,
-                    "religious_order": record.religious_order.religious_order if record.religious_order else None,
-                    "valuation": record.valuation.get_formatted_value() if hasattr(record, "valuation") and record.valuation else None,
+                    "religious_order": (
+                        record.religious_order.religious_order
+                        if record.religious_order
+                        else None
+                    ),
+                    "valuation": (
+                        record.valuation.get_formatted_value()
+                        if hasattr(record, "valuation") and record.valuation
+                        else None
+                    ),
                 }
                 for record in records
             ]
-            return JsonResponse(data, safe=False)  # Return all records as a JSON array
+            return JsonResponse(data, safe=False)
     return JsonResponse({"error": "Invalid request"}, status=400)
 
 
