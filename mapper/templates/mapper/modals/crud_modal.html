@@ -5,9 +5,9 @@
                 <h5 class="modal-title" id="modalTitle"></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body" id="modalContent">
-                <!-- Dynamic content will be injected here -->
-            </div>
+            
+            {% include "mapper/modals/crud_modal_content.html" %}
+            
             <button class="btn btn-link" id="modalLink" aria-label="View details of valor record">
             </button>
             <div class="modal-footer">
