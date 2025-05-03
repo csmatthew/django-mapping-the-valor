@@ -1,4 +1,4 @@
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from valor_records.models import (
@@ -21,7 +21,7 @@ def map_view(request):
         })
 
 
-@csrf_exempt
+@csrf_protect
 def valor_records_json(request):
     slug = request.GET.get("slug")  # Get the slug from the query parameters
     if request.method == "GET":
@@ -29,23 +29,7 @@ def valor_records_json(request):
             # Fetch a single record by slug
             record = get_object_or_404(ValorRecord, slug=slug)
             data = {
-                "name": record.name,
-                "record_type": (
-                    record.record_type.record_type
-                    if record.record_type
-                    else None
-                ),
-                "deanery": (
-                    record.deanery.deanery_name if record.deanery else None
-                ),
                 "dedication": record.dedication or "Unknown",
-                "valuation": (
-                    record.valuation.get_formatted_value()
-                    if hasattr(record, "valuation") and record.valuation
-                    else "Not provided"
-                ),
-                "latitude": record.latitude,
-                "longitude": record.longitude,
                 "slug": record.slug,
             }
             return JsonResponse(data)
@@ -80,24 +64,28 @@ def valor_records_json(request):
                 for record in records
             ]
             return JsonResponse(data, safe=False)
-    return JsonResponse({"error": "Invalid request"}, status=400)
 
+    elif request.method == "POST":
+        if not request.POST.get("csrfmiddlewaretoken"):  # ✅ Checks for CSRF token
+            return JsonResponse({"success": False, "error": "CSRF token missing"}, status=403)
 
-    # elif request.method == "POST":
-    #     # Handle record creation/updating via form
-    #     form = ValorRecordForm(request.POST)
-    #     if form.is_valid():
-    #         record = form.save()
-    #         return JsonResponse({"success": True, "record": {
-    #             "name": record.name,
-    #             "record_type": record.record_type.record_type if record.record_type else None,
-    #             "deanery": record.deanery.deanery_name if record.deanery else None,
-    #             "latitude": record.latitude,
-    #             "longitude": record.longitude,
-    #             "slug": record.slug,
-    #         }})
-    #     return JsonResponse({"success": False, "errors": form.errors})
+        slug = request.POST.get("slug")
+        if not slug:
+            return JsonResponse({"success": False, "error": "Missing slug"}, status=400)
 
+        record = get_object_or_404(ValorRecord, slug=slug)
+        dedication = request.POST.get("dedication", "").strip()
+
+        if dedication:
+            record.dedication = dedication
+            record.save()
+            return JsonResponse({"success": True, "message": "Dedication updated!"})
+        else:
+            return JsonResponse({"success": False, "error": "Dedication cannot be empty"}, status=400)
+
+    return JsonResponse({"error": "Invalid request method"}, status=405)
+
+    # Uncomment and implement the DELETE method if needed
     # elif request.method == "DELETE":
     #     # Handle record deletion via slug
     #     slug = request.GET.get("slug")
@@ -105,6 +93,7 @@ def valor_records_json(request):
     #     record.delete()
     #     return JsonResponse({"success": True})
 
+    # Uncomment the following line if DELETE method is implemented
     # return JsonResponse({"error": "Invalid request"}, status=400)
 
 

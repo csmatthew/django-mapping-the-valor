@@ -9,6 +9,7 @@ class ValorRecordForm(forms.ModelForm):
             "name",
             "record_type",
             "deanery",
+            "dedication",
             "house_type",
             "religious_order",
             "latitude",
