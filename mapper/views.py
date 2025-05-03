@@ -1,8 +1,10 @@
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from valor_records.models import (
     ValorRecord, Deanery, HouseType, RecordType, ReligiousOrder
 )
+import requests
 
 
 def map_view(request):
@@ -19,51 +21,77 @@ def map_view(request):
         })
 
 
+@csrf_exempt
 def valor_records_json(request):
-    valor_records = ValorRecord.objects.filter(status='approved')
-    data = [
-        {
-            'name': record.name or None,
-            'record_type': (
-                record.record_type.record_type if record.record_type else None
-            ),
-            'house_type': (
-                record.house_type.house_type if record.house_type else None
-            ),
-            'deanery': record.deanery.deanery_name if record.deanery else None,
-            'latitude': record.latitude,
-            'longitude': record.longitude,
-            'slug': record.slug,
-            'religious_order': (
-                record.religious_order.religious_order
-                if record.religious_order else None
-            ),
-            'valuation': (
-                record.valuation.get_raw_value()
-                if hasattr(record, 'valuation') and record.valuation
-                else None
-            ),
-            'decimal_valuation': (
-                record.valuation.convert_to_decimal()
-                if hasattr(record, 'valuation') and record.valuation
-                else None
-            ),
-        }
-        for record in valor_records
-    ]
-    return JsonResponse(data, safe=False)
+    slug = request.GET.get("slug")  # Get the slug from the query parameters
+    if request.method == "GET":
+        if slug:
+            # Fetch a single record by slug
+            record = get_object_or_404(ValorRecord, slug=slug)
+            data = {
+                "name": record.name,
+                "record_type": record.record_type.record_type if record.record_type else None,
+                "deanery": record.deanery.deanery_name if record.deanery else None,
+                "dedication": record.dedication or "Unknown",
+                "valuation": record.valuation.get_formatted_value() if hasattr(record, "valuation") and record.valuation else "Not provided",
+            }
+            return JsonResponse(data)  # Return a single record as a JSON object
+        else:
+            # Fetch all records
+            records = ValorRecord.objects.all()
+            data = [
+                {
+                    "name": record.name,
+                    "record_type": record.record_type.record_type if record.record_type else None,
+                    "deanery": record.deanery.deanery_name if record.deanery else None,
+                    "latitude": record.latitude,
+                    "longitude": record.longitude,
+                    "slug": record.slug,
+                    "religious_order": record.religious_order.religious_order if record.religious_order else None,
+                    "valuation": record.valuation.get_formatted_value() if hasattr(record, "valuation") and record.valuation else None,
+                }
+                for record in records
+            ]
+            return JsonResponse(data, safe=False)  # Return all records as a JSON array
+    return JsonResponse({"error": "Invalid request"}, status=400)
 
 
-# Modal views for CRUD functionality
+    # elif request.method == "POST":
+    #     # Handle record creation/updating via form
+    #     form = ValorRecordForm(request.POST)
+    #     if form.is_valid():
+    #         record = form.save()
+    #         return JsonResponse({"success": True, "record": {
+    #             "name": record.name,
+    #             "record_type": record.record_type.record_type if record.record_type else None,
+    #             "deanery": record.deanery.deanery_name if record.deanery else None,
+    #             "latitude": record.latitude,
+    #             "longitude": record.longitude,
+    #             "slug": record.slug,
+    #         }})
+    #     return JsonResponse({"success": False, "errors": form.errors})
+
+    # elif request.method == "DELETE":
+    #     # Handle record deletion via slug
+    #     slug = request.GET.get("slug")
+    #     record = get_object_or_404(ValorRecord, slug=slug)
+    #     record.delete()
+    #     return JsonResponse({"success": True})
+
+    # return JsonResponse({"error": "Invalid request"}, status=400)
+
+
 def crud_modal_view(request):
     return render(request, 'mapper/modals/crud_modal.html')
 
 
 def crud_read_view(request, slug):
-    valor_record = get_object_or_404(ValorRecord, slug=slug)
-    data = {
-        "name": valor_record.name,
-        "record_type": valor_record.record_type.record_type,
-        "deanery": valor_record.deanery.deanery_name,
-    }
-    return JsonResponse(data)
+    # Fetch record data from valor_records_json
+    response = requests.get("/mapper/valor-records/?slug={slug}")
+
+    if response.status_code == 200:
+        record_data = response.json()
+    else:
+        record_data = {}
+
+    return render(request, "mapper/modals/crud_read_modal.html", {"record": record_data})
