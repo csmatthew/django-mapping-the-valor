@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }).addTo(map);
 
         // Fetch Valor Records and add them to the map
-        fetch('/map/valor-records/')
+        fetch('/mapper/valor-records/')
             .then(response => response.json())
             .then(data => {
                 createMarkers(map, data); // Use the createMarkers function from markers.js

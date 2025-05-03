@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from valor_records.models import (
     ValorRecord, Deanery, HouseType, RecordType, ReligiousOrder
@@ -52,3 +52,18 @@ def valor_records_json(request):
         for record in valor_records
     ]
     return JsonResponse(data, safe=False)
+
+
+# Modal views for CRUD functionality
+def crud_modal_view(request):
+    return render(request, 'mapper/modals/crud_modal.html')
+
+
+def crud_read_view(request, slug):
+    valor_record = get_object_or_404(ValorRecord, slug=slug)
+    data = {
+        "name": valor_record.name,
+        "record_type": valor_record.record_type.record_type,
+        "deanery": valor_record.deanery.deanery_name,
+    }
+    return JsonResponse(data)

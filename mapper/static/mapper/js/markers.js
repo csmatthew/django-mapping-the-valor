@@ -6,9 +6,7 @@ function createMarkers(map, data) {
     const markers = L.markerClusterGroup();
 
     data.forEach(record => {
-        if (record.latitude && record.longitude) {
-            console.log(`Adding marker: ${record.name} at ${record.latitude}, ${record.longitude}`);
-            
+        if (record.latitude && record.longitude) {            
             // Construct the name and popup content
             let name = record.name;
             if (record.house_type) {
@@ -30,18 +28,9 @@ function createMarkers(map, data) {
 
             // Add click event to show modal when marker is selected
             marker.on('click', function () {
-                // Fetch the record details using the record slug
-                fetch(`/valor-records/${record.slug}/modal/`)
-                    .then(response => response.text())
-                    .then(html => {
-                        // Populate the modal content
-                        var modalContent = document.getElementById('modal-content');
-                        modalContent.innerHTML = html;
-                        // Show the modal
-                        var viewCardModal = new bootstrap.Modal(document.getElementById('viewCardModal'));
-                        viewCardModal.show();
-                    })
-                    .catch(error => console.error('Error fetching record details:', error));
+                openCrudModal(record.slug);  // Call the function in `crud_modal.js`
+                console.log(`Opening modal for slug: ${record.slug}`);
+
             });
             
             // Optional: Add events for interactivity
