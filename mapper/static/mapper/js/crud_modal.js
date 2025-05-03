@@ -21,6 +21,15 @@ function openCrudModal(slug) {
                 // Inject the JSON data into the modal title
                 modalTitle.textContent = `Record for ${data.name} ${data.record_type}`;
             }
+            let modalLink = document.getElementById("modalLink");
+            if (modalLink) {
+                modalLink.href = `/detail/${data.slug}/`;  // Assign the correct URL
+                modalLink.textContent = `View detailed record for ${data.name} ${data.record_type}`;
+                modalLink.target = "_blank";  // Open in a new tab (optional)
+                modalLink.onclick = function() {
+                    window.location.href = modalLink.href;
+                };
+            }
             let modalContent = document.getElementById("modalContent");
             if (modalContent) {
                 // Inject the JSON data into the modal fields
