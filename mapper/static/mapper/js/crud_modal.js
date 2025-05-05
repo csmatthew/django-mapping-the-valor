@@ -42,7 +42,7 @@ function openCrudModal(slug) {
             const $modal = new bootstrap.Modal(modalElement);
             $modal.show();
 
-            // 🟢 Attach Save button logic after modal is shown
+            // 🟢 Attach Save button logic and conditional logic after modal is shown
             modalElement.addEventListener('shown.bs.modal', () => {
                 console.log("🟢 3. Modal shown event triggered");
 
@@ -52,6 +52,32 @@ function openCrudModal(slug) {
                         saveRecord(slug);
                     });
                 }
+
+                // 🟢 Attach record_type conditional logic
+                const recordTypeInput = modalElement.querySelector('#input_record_type');
+                const monasticFields = modalElement.querySelectorAll('[data-group="monastic"]');
+
+                function toggleMonasticFields() {
+                    let selectedText = "";
+                    if (recordTypeInput.tagName === "SELECT") {
+                        const selectedOption = recordTypeInput.options[recordTypeInput.selectedIndex];
+                        selectedText = selectedOption ? selectedOption.text : "";
+                    } else {
+                        selectedText = recordTypeInput.value;
+                    }
+
+                    // 🔥 FIXED: check for 'Monastery' (case-insensitive)
+                    const show = selectedText.trim().toLowerCase() === 'monastery';
+
+                    monasticFields.forEach(field => {
+                        field.style.display = show ? 'flex' : 'none';
+                    });
+                }
+
+                if (recordTypeInput) {
+                    toggleMonasticFields(); // Run on modal show
+                    recordTypeInput.addEventListener('change', toggleMonasticFields);
+                }
             });
         })
         .catch(error => {
@@ -59,7 +85,7 @@ function openCrudModal(slug) {
         });
 }
 
-// 🟢 Function to handle saving updates
+// 🟢 Save record + update marker popup + close modal
 function saveRecord(slug) {
     const modalElement = document.getElementById("crudModal");
     const formElements = modalElement.querySelectorAll('.field-input');
@@ -94,10 +120,36 @@ function saveRecord(slug) {
                 if (toggle) toggle.checked = false;
             });
 
-            // Optional: Close modal (uncomment if desired)
-            // const modalInstance = bootstrap.Modal.getInstance(modalElement);
-            // modalInstance.hide();
+            // Close the modal
+            const modalInstance = bootstrap.Modal.getInstance(modalElement);
+            modalInstance.hide();
 
+            // 🟢 Update the marker's popup content
+            const updatedRecord = data.record;  // Assuming the updated record is returned
+            const marker = markerMap[updatedRecord.slug];  // Get the marker from markerMap
+
+            if (marker) {
+                let updatedName = updatedRecord.name;
+                if (updatedRecord.house_type) {
+                    updatedName += ` ${updatedRecord.house_type}`;
+                } else if (updatedRecord.record_type !== 'Monastery') {
+                    updatedName += ` ${updatedRecord.record_type}`;
+                }
+
+                let updatedPopupContent = `<b>${updatedName}</b><br>
+                                           Record Type: ${updatedRecord.record_type}<br>
+                                           Deanery: ${updatedRecord.deanery}<br>
+                                           Valuation: ${updatedRecord.valuation}<br>`;
+                if (updatedRecord.religious_order) {
+                    updatedPopupContent += `Religious Order: ${updatedRecord.religious_order}<br>`;
+                }
+
+                // Update the popup content
+                marker.setPopupContent(updatedPopupContent);
+
+                // Make sure the map re-renders the marker popup
+                marker.openPopup();
+            }
         } else {
             console.error("🔴 Validation errors:", data.errors);
             alert('Please correct the form errors.');
@@ -106,6 +158,33 @@ function saveRecord(slug) {
     .catch(error => {
         console.error("🔴 Error updating record:", error);
     });
+}
+
+// 🟢 Update popup content of the marker
+function updateMarkerPopup(record) {
+    const marker = window.markerMap[record.slug];
+    if (!marker) {
+        console.warn(`⚠️ Marker for slug "${record.slug}" not found`);
+        return;
+    }
+
+    let name = record.name;
+    if (record.house_type) {
+        name += ` ${record.house_type}`;
+    } else if (record.record_type && record.record_type !== 'Monastery') {
+        name += ` ${record.record_type}`;
+    }
+
+    let popupContent = `<b>${name}</b><br>
+                        Record Type: ${record.record_type}<br>
+                        Deanery: ${record.deanery}<br>
+                        Valuation: ${record.valuation}<br>`;
+    if (record.religious_order) {
+        popupContent += `Religious Order: ${record.religious_order}<br>`;
+    }
+
+    marker.setPopupContent(popupContent);
+    console.log(`🟢 Popup updated for slug: ${record.slug}`);
 }
 
 // 🟢 Helper to get CSRF token from cookie

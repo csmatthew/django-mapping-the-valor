@@ -19,7 +19,7 @@ def map_view(request):
         'house_types': house_types,
         'record_types': record_types,
         'religious_orders': religious_orders,
-        })
+    })
 
 
 @csrf_protect
@@ -98,10 +98,47 @@ def update_record(request, slug):
         form = ValorRecordForm(request.POST, instance=record)
 
         if form.is_valid():
-            form.save()
+            updated_record = form.save()
+
+            # Prepare updated record data to return
+            record_data = {
+                "slug": updated_record.slug,
+                "name": updated_record.name,
+                "record_type": (
+                    updated_record.record_type.record_type
+                    if updated_record.record_type else ""
+                ),
+                "house_type": (
+                    updated_record.house_type.house_type
+                    if (
+                        hasattr(updated_record, "house_type")
+                        and updated_record.house_type
+                    )
+                    else ""
+                ),
+                "deanery": (
+                    updated_record.deanery.deanery_name
+                    if updated_record.deanery else ""
+                ),
+                "religious_order": (
+                    updated_record.religious_order.religious_order
+                    if updated_record.religious_order
+                    else ""
+                ),
+                "valuation": (
+                    updated_record.valuation.get_formatted_value()
+                    if (
+                        hasattr(updated_record, "valuation")
+                        and updated_record.valuation
+                    )
+                    else ""
+                ),
+            }
+
             return JsonResponse({
                 "success": True,
-                "message": "Record updated successfully!"
+                "message": "Record updated successfully!",
+                "record": record_data
             })
         else:
             return JsonResponse(
