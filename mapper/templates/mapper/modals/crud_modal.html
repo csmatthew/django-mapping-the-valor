@@ -1,15 +1,26 @@
-<div class="modal fade" id="crudModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+<div class="modal fade show" id="crudModal" tabindex="-1" aria-labelledby="modalTitle" aria-modal="true" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modalTitle"></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            
-            {% include "mapper/modals/crud_modal_content.html" %}
-            
-            <button class="btn btn-link" id="modalLink" aria-label="View details of valor record">
-            </button>
+            <div class="modal-body" id="modalContent">
+                {% for field in form %}
+                    <div class="row mb-2 align-items-center">
+                        <div class="col-md-3 text-end fw-bold">{{ field.label }}</div>  <!-- Label -->
+                        <div class="col-md-7">
+                            <span class="field-value" id="value_{{ field.name }}">{{ field.value|default:"-" }}</span>  <!-- Read-only -->
+                            <input type="text" name="{{ field.name }}" class="field-input form-control d-none" id="input_{{ field.name }}" value="{{ field.value|default:"" }}">  <!-- Hidden input -->
+                        </div>
+                        {% if user.is_authenticated %}
+                            <div class="col-md-2 text-center">
+                                <input type="checkbox" class="toggle-edit" data-field="{{ field.name }}">  <!-- Checkbox -->
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>

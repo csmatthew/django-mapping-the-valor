@@ -1,8 +1,7 @@
 from django.urls import path
 from . import views
 from .views import (
-    crud_modal_view,
-    crud_read_view,
+    crud_modal,
 )
 
 urlpatterns = [
@@ -14,14 +13,8 @@ urlpatterns = [
     ),
     # URL for the generic CRUD modal (without specific record details)
     path(
-        "modal/",
-        crud_modal_view,
+        "modal/<slug:slug>/",
+        crud_modal,
         name="crud_modal"
-    ),
-    # URL for loading a specific ValorRecord into the modal
-    path(
-        "modal/<slug:slug>/read/",
-        crud_read_view,
-        name="crud_read_modal"
     ),
 ]

@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from valor_records.models import (
     ValorRecord, Deanery, HouseType, RecordType, ReligiousOrder
 )
-import requests
+from valor_records.forms import ValorRecordForm
 
 
 def map_view(request):
@@ -65,49 +65,12 @@ def valor_records_json(request):
             ]
             return JsonResponse(data, safe=False)
 
-    elif request.method == "POST":
-        if not request.POST.get("csrfmiddlewaretoken"):  # ✅ Checks for CSRF token
-            return JsonResponse({"success": False, "error": "CSRF token missing"}, status=403)
 
-        slug = request.POST.get("slug")
-        if not slug:
-            return JsonResponse({"success": False, "error": "Missing slug"}, status=400)
-
-        record = get_object_or_404(ValorRecord, slug=slug)
-        dedication = request.POST.get("dedication", "").strip()
-
-        if dedication:
-            record.dedication = dedication
-            record.save()
-            return JsonResponse({"success": True, "message": "Dedication updated!"})
-        else:
-            return JsonResponse({"success": False, "error": "Dedication cannot be empty"}, status=400)
-
-    return JsonResponse({"error": "Invalid request method"}, status=405)
-
-    # Uncomment and implement the DELETE method if needed
-    # elif request.method == "DELETE":
-    #     # Handle record deletion via slug
-    #     slug = request.GET.get("slug")
-    #     record = get_object_or_404(ValorRecord, slug=slug)
-    #     record.delete()
-    #     return JsonResponse({"success": True})
-
-    # Uncomment the following line if DELETE method is implemented
-    # return JsonResponse({"error": "Invalid request"}, status=400)
-
-
-def crud_modal_view(request):
-    return render(request, 'mapper/modals/crud_modal.html')
-
-
-def crud_read_view(request, slug):
-    # Fetch record data from valor_records_json
-    response = requests.get("/mapper/valor-records/?slug={slug}")
-
-    if response.status_code == 200:
-        record_data = response.json()
-    else:
-        record_data = {}
-
-    return render(request, "mapper/modals/crud_read_modal.html", {"record": record_data})
+def crud_modal(request, slug):
+    record = get_object_or_404(ValorRecord, slug=slug)
+    form = ValorRecordForm(instance=record)
+    return render(
+        request,
+        "mapper/modals/crud_modal.html",
+        {"form": form, "record": record},
+    )
