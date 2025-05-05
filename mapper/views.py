@@ -1,6 +1,6 @@
-from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_protect
 from valor_records.models import (
     ValorRecord, Deanery, HouseType, RecordType, ReligiousOrder
 )
@@ -71,6 +71,26 @@ def crud_modal(request, slug):
     form = ValorRecordForm(instance=record)
     return render(
         request,
-        "mapper/modals/crud_modal.html",
+        "mapper/modals/crud_modal_content.html",
         {"form": form, "record": record},
     )
+
+
+@csrf_protect
+def update_record(request, slug):
+    record = get_object_or_404(ValorRecord, slug=slug)
+
+    if request.method == 'POST':
+        form = ValorRecordForm(request.POST, instance=record)
+
+        if form.is_valid():
+            form.save()
+            return JsonResponse({
+                "success": True,
+                "message": "Record updated successfully!"
+            })
+        else:
+            return JsonResponse(
+                {"success": False, "errors": form.errors},
+                status=400
+            )

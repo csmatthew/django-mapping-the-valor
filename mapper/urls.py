@@ -17,4 +17,9 @@ urlpatterns = [
         crud_modal,
         name="crud_modal"
     ),
+    path(
+        'modal/<slug:slug>/update/',
+        views.update_record,
+        name='update_record'
+    ),
 ]
