@@ -1,3 +1,4 @@
+from django import forms
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
@@ -69,10 +70,23 @@ def valor_records_json(request):
 def crud_modal(request, slug):
     record = get_object_or_404(ValorRecord, slug=slug)
     form = ValorRecordForm(instance=record)
+
+    # Prepare form fields with additional context for foreign keys
+    form_fields = []
+    for field in form:
+        is_fk_field = isinstance(field.field, forms.ModelChoiceField)
+        if is_fk_field and field.value():
+            # Get the string representation of the related object
+            related_object = field.field.queryset.get(pk=field.value())
+            display_value = str(related_object)
+        else:
+            display_value = field.value() or "-"
+        form_fields.append((field, is_fk_field, display_value))
+
     return render(
         request,
         "mapper/modals/crud_modal_content.html",
-        {"form": form, "record": record},
+        {"form_fields": form_fields, "record": record},
     )
 
 

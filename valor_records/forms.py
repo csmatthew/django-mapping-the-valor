@@ -7,6 +7,7 @@ class ValorRecordForm(forms.ModelForm):
         model = ValorRecord
         fields = [
             "name",
+            "deanery",
             "dedication",
 
         ]
