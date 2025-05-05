@@ -1,5 +1,9 @@
 {% for field, is_fk, display_value in form_fields %}
+    {% if field.name == 'house_type' or field.name == 'religious_order' %}
+    <div class="row mb-2 align-items-center" data-group="monastic">
+    {% else %}
     <div class="row mb-2 align-items-center">
+    {% endif %}
         <div class="col-md-3 text-end fw-bold">
             <label for="input_{{ field.name }}">{{ field.label }}</label>
         </div>

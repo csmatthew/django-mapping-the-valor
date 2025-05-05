@@ -8,6 +8,16 @@ class ValorRecordForm(forms.ModelForm):
         fields = [
             "name",
             "deanery",
+            "record_type",
             "dedication",
+            # Monastic
+            "house_type",
+            "religious_order",
+            # Geographical Coordinates
+            "latitude",
+            "longitude",
+            # Reference data
+            "source_ref_vol",
+            "source_ref_page",
 
         ]
