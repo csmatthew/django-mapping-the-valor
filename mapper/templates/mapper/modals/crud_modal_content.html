@@ -1,21 +1,38 @@
-{% for field in form %}
-<div class="row mb-2 align-items-center">
-    <div class="col-md-3 text-end fw-bold">
-        <label for="input_{{ field.name }}">{{ field.label }}</label>
-    </div>
-    <div class="col-md-7">
-        <span class="field-value" id="value_{{ field.name }}">{{ field.value|default:"-" }}</span>
-        <input type="text" name="{{ field.name }}" class="field-input form-control d-none" id="input_{{ field.name }}"
-            value="{{ field.value|default:'' }}" placeholder="{{ field.label }}" title="{{ field.label }}">
-    </div>
+{% for field, is_fk, display_value in form_fields %}
+    <div class="row mb-2 align-items-center">
+        <div class="col-md-3 text-end fw-bold">
+            <label for="input_{{ field.name }}">{{ field.label }}</label>
+        </div>
+        <div class="col-md-7">
+            {% if is_fk %}
+                <!-- For foreign keys, display the related field's string value -->
+                <span class="field-value" id="value_{{ field.name }}">
+                    {{ display_value }}
+                </span>
+                <select name="{{ field.name }}" class="field-input form-control d-none" id="input_{{ field.name }}">
+                    {% for obj in field.field.queryset %}
+                        <option value="{{ obj.pk }}" {% if obj.pk == field.value %}selected{% endif %}>
+                            {{ obj }}
+                        </option>
+                    {% endfor %}
+                </select>
+            {% else %}
+                <!-- For other fields, just display the value directly -->
+                <span class="field-value" id="value_{{ field.name }}">
+                    {{ display_value }}
+                </span>
+                <input type="text" name="{{ field.name }}" class="field-input form-control d-none" id="input_{{ field.name }}"
+                    value="{{ field.value|default:'' }}" placeholder="{{ field.label }}" title="{{ field.label }}">
+            {% endif %}
+        </div>
 
-    {% if user.is_authenticated %}
-    <div class="col-md-2 text-center">
-        <label>
-            <input type="checkbox" class="toggle-edit" data-field="{{ field.name }}">
-            <span class="visually-hidden">Enable editing for {{ field.label }}</span>
-        </label>
+        {% if user.is_authenticated %}
+        <div class="col-md-2 text-center">
+            <label>
+                <input type="checkbox" class="toggle-edit" data-field="{{ field.name }}">
+                <span class="visually-hidden">Enable editing for {{ field.label }}</span>
+            </label>
+        </div>
+        {% endif %}
     </div>
-    {% endif %}
-</div>
 {% endfor %}
