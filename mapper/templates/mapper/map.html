@@ -22,11 +22,6 @@
                 <label><input type="checkbox" class="record-type-filter" value="Collegiate" checked> Collegiate</label>
                 <!-- Add more filters as needed -->
             </div>
-            {% if user.is_authenticated %}
-            <button type="button" id="add-entry-btn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#crudModal">
-                Add Entry
-            </button>
-            {% endif %}
         </div>
         <div id="map"></div>
     </div>
