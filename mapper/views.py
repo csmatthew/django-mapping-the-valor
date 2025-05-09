@@ -45,6 +45,11 @@ def valor_records_json(request):
                         if record.record_type
                         else None
                     ),
+                    "house_type": (
+                        record.house_type.house_type
+                        if record.house_type
+                        else None
+                    ),
                     "deanery": (
                         record.deanery.deanery_name if record.deanery else None
                     ),
