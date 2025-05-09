@@ -12,21 +12,33 @@ function createMarkers(map, data) {
 
     data.forEach(record => {
         if (record.latitude && record.longitude) {
+            console.log('Record Name:', record.name);
+            console.log('House Type:', record.house_type);
+            console.log('Record Type:', record.record_type);
+
             // Construct the name and popup content
             let name = record.name;
+
+            // Always append house_type if it exists
             if (record.house_type) {
                 name += ` ${record.house_type}`;
-            } else if (record.record_type !== 'Monastery') {
-                name += ` ${record.record_type}`;
             }
 
+            // If no house_type and record_type exists, append the record_type (but not if it's 'Monastery')
+            else if (record.record_type && record.record_type !== 'Monastery') {
+                name += ` ${record.record_type}`;
+            }
+            console.log(name); // Check the constructed name
+
             let popupContent = `<b>${name}</b><br>
-                                Record Type: ${record.record_type}<br>
-                                Deanery: ${record.deanery}<br>
-                                Valuation: ${record.valuation}<br>`;
+                    Record Type: ${record.record_type}<br>
+                    Deanery: ${record.deanery}<br>
+                    Valuation: ${record.valuation}<br>`;
+
             if (record.religious_order) {
                 popupContent += `Religious Order: ${record.religious_order}<br>`;
             }
+
 
             // Create the marker
             let marker = L.marker([record.latitude, record.longitude])
@@ -37,7 +49,7 @@ function createMarkers(map, data) {
 
             // Add click event to show modal when marker is selected
             marker.on('click', function () {
-                openCrudModal(record.slug);  // Call the function in crud_modal.js
+                openCrudModal(record.slug); // Call the function in crud_modal.js
                 console.log(`Opening modal for slug: ${record.slug}`);
             });
 
