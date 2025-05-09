@@ -3,18 +3,15 @@
 // Make markerMap globally accessible
 window.markerMap = {};
 
-// Function to create markers and add them to a marker cluster group
+// Function to create markers and add them to the global marker cluster group
 function createMarkers(map, data) {
     console.log(`Total Records: ${data.length}`);
-
-    // Initialize the marker cluster group
-    const markers = L.markerClusterGroup();
 
     // Reset global markerMap
     window.markerMap = {};
 
     data.forEach(record => {
-        if (record.latitude && record.longitude) {            
+        if (record.latitude && record.longitude) {
             // Construct the name and popup content
             let name = record.name;
             if (record.house_type) {
@@ -40,7 +37,7 @@ function createMarkers(map, data) {
 
             // Add click event to show modal when marker is selected
             marker.on('click', function () {
-                openCrudModal(record.slug);  // Call the function in `crud_modal.js`
+                openCrudModal(record.slug);  // Call the function in crud_modal.js
                 console.log(`Opening modal for slug: ${record.slug}`);
             });
 
@@ -52,14 +49,8 @@ function createMarkers(map, data) {
             marker.on('mouseout', function () {
                 marker.closePopup();
             });
-
-            // Add marker to the marker cluster group
-            markers.addLayer(marker);
         } else {
             console.warn(`Skipping ${record.name}: Missing coordinates`);
         }
     });
-
-    // Add the marker cluster group to the map
-    map.addLayer(markers);
 }
