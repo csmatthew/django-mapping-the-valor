@@ -34,6 +34,13 @@
     height: 36px !important; /* Align the dropdown arrow */
 }
 
+/* Grey out label text when checkbox is disabled */
+.map-filter label.disabled {
+    color: #6c757d; /* Bootstrap's text-muted grey */
+    cursor: not-allowed;
+}
+
+
 @media (max-width: 768px) {
     #map-container {
         max-width: 95%; /* Increase the width slightly for smaller screens */

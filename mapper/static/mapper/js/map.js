@@ -1,4 +1,5 @@
 let map; // Define map variable globally
+let allMarkers = L.markerClusterGroup(); // Marker cluster group
 
 document.addEventListener('DOMContentLoaded', function () {
     var mapContainer = document.getElementById('map');
@@ -6,14 +7,14 @@ document.addEventListener('DOMContentLoaded', function () {
     if (mapContainer && !mapContainer._leaflet_map) {
         map = L.map('map', {
             center: [53.5, -2.25], // Centered on Manchester
-            zoom: 10, // Set initial zoom level to 10 for a more zoomed-in view
-            minZoom: 6, // Prevent zooming out further than zoom level 6
+            zoom: 10,
+            minZoom: 6,
             maxBounds: [
-                [49.5, -10.5], // Southwest corner
-                [59, 2]       // Northeast corner
+                [49.5, -10.5],
+                [59, 2]
             ],
-            maxBoundsViscosity: 1.0, // Ensures the map is completely restricted to the bounds
-            zoomControl: false // Disable the default zoom control
+            maxBoundsViscosity: 1.0,
+            zoomControl: false
         });
         mapContainer._leaflet_map = map;
 
@@ -30,9 +31,61 @@ document.addEventListener('DOMContentLoaded', function () {
         fetch('/mapper/valor-records/')
             .then(response => response.json())
             .then(data => {
-                createMarkers(map, data); // Use the createMarkers function from markers.js
-                // filterMarkers(); // Apply initial filter
+                createMarkers(map, data);
+                setupFilters(data); // Initialize filter functionality
             })
             .catch(error => console.error('Error fetching valor records:', error));
     }
 });
+
+function setupFilters(data) {
+    const viewAllCheckbox = document.getElementById('view-all-filter');
+    const typeCheckboxes = document.querySelectorAll('.record-type-filter');
+
+    // Enable/disable type checkboxes + grey out text
+    function toggleTypeCheckboxes(disable) {
+        typeCheckboxes.forEach(cb => {
+            const label = cb.parentElement;
+            cb.disabled = disable;
+            if (disable) {
+                cb.checked = false;
+                label.classList.add('disabled');
+            } else {
+                label.classList.remove('disabled');
+            }
+        });
+    }
+
+    // Event listeners
+    viewAllCheckbox.addEventListener('change', () => {
+        toggleTypeCheckboxes(viewAllCheckbox.checked);
+        filterMarkers(data);
+    });
+
+    typeCheckboxes.forEach(cb => {
+        cb.addEventListener('change', () => filterMarkers(data));
+    });
+
+    // On load — enforce default states
+    toggleTypeCheckboxes(viewAllCheckbox.checked);
+    filterMarkers(data);
+}
+
+function filterMarkers(data) {
+    const viewAllChecked = document.getElementById('view-all-filter').checked;
+    const activeTypes = Array.from(document.querySelectorAll('.record-type-filter:checked')).map(cb => cb.value);
+
+    // Clear existing markers from the map
+    allMarkers.clearLayers();
+
+    data.forEach(record => {
+        if (record.latitude && record.longitude) {
+            const shouldShow = viewAllChecked || activeTypes.includes(record.record_type);
+            if (shouldShow && window.markerMap[record.slug]) {
+                allMarkers.addLayer(window.markerMap[record.slug]);
+            }
+        }
+    });
+
+    map.addLayer(allMarkers);
+}
