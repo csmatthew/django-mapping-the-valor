@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_protect
 from valor_records.models import (
     ValorRecord, Deanery, HouseType, RecordType, ReligiousOrder
 )
-from valor_records.forms import ValorRecordForm
+from valor_records.forms import ValorRecordForm, ValuationForm
 
 
 def map_view(request):
@@ -74,24 +74,33 @@ def valor_records_json(request):
 
 def crud_modal(request, slug):
     record = get_object_or_404(ValorRecord, slug=slug)
-    form = ValorRecordForm(instance=record)
+
+    valor_form = ValorRecordForm(instance=record)
+    valuation_form = ValuationForm(instance=record.valuation)
 
     # Prepare form fields with additional context for foreign keys
     form_fields = []
-    for field in form:
-        is_fk_field = isinstance(field.field, forms.ModelChoiceField)
-        if is_fk_field and field.value():
-            # Get the string representation of the related object
-            related_object = field.field.queryset.get(pk=field.value())
-            display_value = str(related_object)
-        else:
-            display_value = field.value() or "-"
-        form_fields.append((field, is_fk_field, display_value))
+
+    # ✅ Loop through BOTH forms
+    for form in [valor_form, valuation_form]:
+        for field in form:
+            is_fk_field = isinstance(field.field, forms.ModelChoiceField)
+            if is_fk_field and field.value():
+                related_object = field.field.queryset.get(pk=field.value())
+                display_value = str(related_object)
+            else:
+                display_value = field.value() or "-"
+            form_fields.append((field, is_fk_field, display_value))
 
     return render(
         request,
         "mapper/modals/crud_modal_content.html",
-        {"form_fields": form_fields, "record": record},
+        {
+            "valor_form": valor_form,
+            "valuation_form": valuation_form,
+            "form_fields": form_fields,
+            "record": record,
+        },
     )
 
 

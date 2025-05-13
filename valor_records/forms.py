@@ -1,5 +1,5 @@
 from django import forms
-from .models import ValorRecord
+from .models import ValorRecord, Valuation
 
 
 class ValorRecordForm(forms.ModelForm):
@@ -19,5 +19,14 @@ class ValorRecordForm(forms.ModelForm):
             # Reference data
             "source_ref_vol",
             "source_ref_page",
+        ]
 
+
+class ValuationForm(forms.ModelForm):
+    class Meta:
+        model = Valuation
+        fields = [
+            "raw_pounds",
+            "raw_shillings",
+            "raw_pence",
         ]
