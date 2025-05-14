@@ -5,16 +5,13 @@ window.markerMap = {};
 
 // Function to create markers and add them to the global marker cluster group
 function createMarkers(map, data) {
-    console.log(`Total Records: ${data.length}`);
 
     // Reset global markerMap
     window.markerMap = {};
 
     data.forEach(record => {
         if (record.latitude && record.longitude) {
-            console.log('Record Name:', record.name);
-            console.log('House Type:', record.house_type);
-            console.log('Record Type:', record.record_type);
+
 
             // Construct the name and popup content
             let name = record.name;
@@ -28,7 +25,6 @@ function createMarkers(map, data) {
             else if (record.record_type && record.record_type !== 'Monastery') {
                 name += ` ${record.record_type}`;
             }
-            console.log(name); // Check the constructed name
 
             let popupContent = `<b>${name}</b><br>
                     Record Type: ${record.record_type}<br>

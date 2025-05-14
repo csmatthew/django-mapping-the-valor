@@ -22,6 +22,9 @@
                 <label><input type="checkbox" class="record-type-filter" value="Collegiate"> Collegiate</label>
                 <!-- Add more filters as needed -->
             </div>
+            <div>
+                <button class="btn btn-primary" id="add-record-btn">Add Record</button>
+            </div>
         </div>
         <div id="map"></div>
     </div>
@@ -44,5 +47,10 @@
     <script src="{% static 'mapper/js/crud_modal.js' %}"></script>
     <script src="{% static 'mapper/js/markers.js' %}"></script>
     <script src="{% static 'mapper/js/map.js' %}"></script>
-    
+    {% if user.is_authenticated %}
+    <script src="{% static 'mapper/js/map_add.js' %}"></script>
+    {% endif %}
+    <script>
+        const isUserAuthenticated = {{ is_user_authenticated|yesno:"true,false" }};
+    </script>
 {% endblock %}

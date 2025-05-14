@@ -19,6 +19,7 @@ def map_view(request):
         'house_types': house_types,
         'record_types': record_types,
         'religious_orders': religious_orders,
+        'is_user_authenticated': request.user.is_authenticated,
     })
 
 
