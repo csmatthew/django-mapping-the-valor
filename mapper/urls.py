@@ -2,6 +2,8 @@ from django.urls import path
 from . import views
 from .views import (
     crud_modal,
+    add_record,
+    get_dropdown_options,
 )
 
 urlpatterns = [
@@ -22,4 +24,6 @@ urlpatterns = [
         views.update_record,
         name='update_record'
     ),
+    path('add-record/', add_record, name='add_record'),
+    path('get-dropdown-options/', get_dropdown_options, name='get_dropdown_options'),
 ]

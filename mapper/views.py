@@ -1,7 +1,7 @@
 from django import forms
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from valor_records.models import (
     ValorRecord, Deanery, HouseType, RecordType, ReligiousOrder
 )
@@ -160,3 +160,52 @@ def update_record(request, slug):
                 {"success": False, "errors": form.errors},
                 status=400
             )
+
+
+@csrf_exempt
+def add_record(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        record_type_name = request.POST.get('record_type')
+        deanery_name = request.POST.get('deanery')
+        latitude = request.POST.get('latitude')
+        longitude = request.POST.get('longitude')
+
+        # Validate and fetch related objects
+        try:
+            record_type = RecordType.objects.get(record_type=record_type_name)
+            deanery = Deanery.objects.get(deanery_name=deanery_name)
+        except (RecordType.DoesNotExist, Deanery.DoesNotExist):
+            return JsonResponse({'success': False, 'errors': 'Invalid record type or deanery.'}, status=400)
+
+        # Create the new record
+        record = ValorRecord.objects.create(
+            name=name,
+            record_type=record_type,
+            deanery=deanery,
+            latitude=latitude,
+            longitude=longitude,
+            status='approved',  # Set status to Approved
+        )
+
+        return JsonResponse({
+            'success': True,
+            'record': {
+                'name': record.name,
+                'record_type': record.record_type.record_type,
+                'latitude': record.latitude,
+                'longitude': record.longitude,
+            }
+        })
+
+    return JsonResponse({'success': False, 'errors': 'Invalid request method.'}, status=405)
+
+
+def get_dropdown_options(request):
+    record_types = RecordType.objects.values_list('record_type', flat=True)
+    deaneries = Deanery.objects.values_list('deanery_name', flat=True)
+
+    return JsonResponse({
+        'record_types': list(record_types),
+        'deaneries': list(deaneries),
+    })

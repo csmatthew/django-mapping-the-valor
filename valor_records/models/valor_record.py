@@ -15,22 +15,22 @@ class ValorRecord(models.Model):
     ]
 
     # General
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)  # Required
     slug = models.SlugField(unique=True, blank=True)
     record_type = models.ForeignKey(
         RecordType,
         on_delete=models.CASCADE,
         related_name='valor_records'
-    )
+    )  # Required
     dedication = models.CharField(blank=True, max_length=255, null=True)
     deanery = models.ForeignKey(
         Deanery,
         on_delete=models.CASCADE,
         related_name='valor_records'
-    )
+    )  # Required
     status = models.CharField(
         max_length=10, choices=STATUS_CHOICES, default='pending'
-    )
+    )  # Required
 
     # Monastic
     house_type = models.ForeignKey(
