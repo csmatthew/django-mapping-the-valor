@@ -54,11 +54,8 @@ document.addEventListener('DOMContentLoaded', function () {
                                 ${deaneryOptions}
                             </select><br>
                             
-                            <label for="latitude">Latitude:</label>
-                            <input type="text" id="latitude" name="latitude" value="${latitude}" readonly><br>
-                            
-                            <label for="longitude">Longitude:</label>
-                            <input type="text" id="longitude" name="longitude" value="${longitude}" readonly><br>
+                            <input type="hidden" id="latitude" name="latitude" value="${latitude}">
+                            <input type="hidden" id="longitude" name="longitude" value="${longitude}">
                             
                             <button type="submit">Add Record</button>
                         </form>
