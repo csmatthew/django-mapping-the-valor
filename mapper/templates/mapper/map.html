@@ -52,5 +52,10 @@
     {% endif %}
     <script>
         const isUserAuthenticated = {{ is_user_authenticated|yesno:"true,false" }};
+        {% if user.is_authenticated %}
+        const currentUsername = "{{ user.username|escapejs }}";
+        {% else %}
+        const currentUsername = null;
+        {% endif %}
     </script>
 {% endblock %}

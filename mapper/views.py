@@ -1,7 +1,7 @@
 from django import forms
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_protect, csrf_exempt
+from django.views.decorators.csrf import csrf_protect
 from valor_records.models import (
     ValorRecord, Deanery, HouseType, RecordType, ReligiousOrder
 )
@@ -165,9 +165,14 @@ def update_record(request, slug):
             )
 
 
-@csrf_exempt
+@csrf_protect
 def add_record(request):
     if request.method == 'POST':
+        if not request.user.is_authenticated:
+            return JsonResponse(
+                {'success': False, 'errors': 'User not authenticated.'},
+                status=403
+            )
         name = request.POST.get('name')
         record_type_name = request.POST.get('record_type')
         deanery_name = request.POST.get('deanery')
@@ -195,6 +200,7 @@ def add_record(request):
             latitude=latitude,
             longitude=longitude,
             status='approved',  # Set status to Approved
+            created_by=request.user,
         )
 
         return JsonResponse({
@@ -204,6 +210,7 @@ def add_record(request):
                 'record_type': record.record_type.record_type,
                 'latitude': record.latitude,
                 'longitude': record.longitude,
+                'created_by': record.created_by.username,
             }
         })
 

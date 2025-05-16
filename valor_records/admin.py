@@ -59,11 +59,21 @@ class ValorRecordAdmin(admin.ModelAdmin):
         }),
         ('User Information', {
             'fields': ('created_by', 'last_edited_by'),
-            'classes': ('collapse',),
+            #  'classes': ('collapse',),
+        }),
+        ('Timestamps', {
+            'fields': ('date_created', 'date_updated'),
         }),
     )
 
-    readonly_fields = ('slug', 'created_by', 'last_edited_by')
+    readonly_fields = (
+        'slug',
+        'created_by',
+        'last_edited_by',
+        'last_edited_by',
+        'date_created',
+        'date_updated',
+    )
 
     class Media:
         js = ('valor_records/js/admin.js',)
