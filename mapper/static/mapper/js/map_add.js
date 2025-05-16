@@ -66,6 +66,12 @@ document.addEventListener('DOMContentLoaded', function () {
                         .setContent(popupContent)
                         .openOn(map);
 
+                    // Initialize Select2 for the dropdowns
+                    setTimeout(() => {
+                        $('#record_type').select2({ width: '100%' });
+                        $('#deanery').select2({ width: '100%' });
+                    }, 0);
+
                     // Handle form submission
                     const form = document.getElementById('add-record-form');
                     form.addEventListener('submit', function (event) {

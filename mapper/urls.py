@@ -25,5 +25,9 @@ urlpatterns = [
         name='update_record'
     ),
     path('add-record/', add_record, name='add_record'),
-    path('get-dropdown-options/', get_dropdown_options, name='get_dropdown_options'),
+    path(
+        'get-dropdown-options/',
+        get_dropdown_options,
+        name='get_dropdown_options'
+    ),
 ]

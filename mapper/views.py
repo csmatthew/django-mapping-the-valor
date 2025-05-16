@@ -77,18 +77,21 @@ def crud_modal(request, slug):
     record = get_object_or_404(ValorRecord, slug=slug)
 
     valor_form = ValorRecordForm(instance=record)
-    valuation_form = ValuationForm(instance=record.valuation)
+    valuation_instance = getattr(record, "valuation", None)
+    valuation_form = ValuationForm(instance=valuation_instance)
 
     # Prepare form fields with additional context for foreign keys
     form_fields = []
 
-    # ✅ Loop through BOTH forms
     for form in [valor_form, valuation_form]:
         for field in form:
             is_fk_field = isinstance(field.field, forms.ModelChoiceField)
             if is_fk_field and field.value():
-                related_object = field.field.queryset.get(pk=field.value())
-                display_value = str(related_object)
+                try:
+                    related_object = field.field.queryset.get(pk=field.value())
+                    display_value = str(related_object)
+                except Exception:
+                    display_value = "-"
             else:
                 display_value = field.value() or "-"
             form_fields.append((field, is_fk_field, display_value))
@@ -176,7 +179,13 @@ def add_record(request):
             record_type = RecordType.objects.get(record_type=record_type_name)
             deanery = Deanery.objects.get(deanery_name=deanery_name)
         except (RecordType.DoesNotExist, Deanery.DoesNotExist):
-            return JsonResponse({'success': False, 'errors': 'Invalid record type or deanery.'}, status=400)
+            return JsonResponse(
+                {
+                    'success': False,
+                    'errors': 'Invalid record type or deanery.'
+                },
+                status=400
+            )
 
         # Create the new record
         record = ValorRecord.objects.create(
@@ -198,7 +207,10 @@ def add_record(request):
             }
         })
 
-    return JsonResponse({'success': False, 'errors': 'Invalid request method.'}, status=405)
+    return JsonResponse(
+        {'success': False, 'errors': 'Invalid request method.'},
+        status=405
+    )
 
 
 def get_dropdown_options(request):
