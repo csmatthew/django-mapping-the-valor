@@ -36,9 +36,6 @@
 
 {% block additional_scripts %}
     <!-- Custom JS -->
-    {% if user.is_authenticated %}
-    <script src="{% static 'mapper/js/select2_init.js' %}"></script>
-    {% endif %}
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <!-- Leaflet.markercluster JS -->

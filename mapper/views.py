@@ -77,6 +77,7 @@ def crud_modal(request, slug):
     record = get_object_or_404(ValorRecord, slug=slug)
 
     valor_form = ValorRecordForm(instance=record)
+    # Check if the record has a valuation instance
     valuation_instance = getattr(record, "valuation", None)
     valuation_form = ValuationForm(instance=valuation_instance)
 

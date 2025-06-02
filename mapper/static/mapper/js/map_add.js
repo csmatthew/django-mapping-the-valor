@@ -32,7 +32,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(response => response.json())
                 .then(data => {
                     const recordTypeOptions = data.record_types
-                        .map(type => `<option value="${type}">${type}</option>`)
+                        // Map record types to options
+                        .map(recordType => `<option value="${recordType}">${recordType}</option>`)
                         .join('');
                     const deaneryOptions = data.deaneries
                         .map(deanery => `<option value="${deanery}">${deanery}</option>`)
@@ -65,12 +66,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         .setLatLng([latitude, longitude])
                         .setContent(popupContent)
                         .openOn(map);
-
-                    // Initialize Select2 for the dropdowns
-                    setTimeout(() => {
-                        $('#record_type').select2({ width: '100%' });
-                        $('#deanery').select2({ width: '100%' });
-                    }, 0);
 
                     // Handle form submission
                     const form = document.getElementById('add-record-form');
