@@ -20,6 +20,14 @@ class ValorRecordForm(forms.ModelForm):
             "source_ref_vol",
             "source_ref_page",
         ]
+        widgets = {
+            "latitude": forms.HiddenInput(),
+            "longitude": forms.HiddenInput(),
+            "record_type": forms.Select(attrs={"class": "form-control"}),
+            "deanery": forms.Select(attrs={"class": "form-control"}),
+            "house_type": forms.Select(attrs={"class": "form-control"}),
+            "religious_order": forms.Select(attrs={"class": "form-control"}),
+        }
 
 
 class ValuationForm(forms.ModelForm):
