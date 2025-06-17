@@ -41,8 +41,11 @@ def add_record(request):
             return JsonResponse({
                 "success": True,
                 "record": {
+                    "name": record.name,
+                    "record_type": record.record_type.record_type if record.record_type else "",
+                    "latitude": record.latitude,
+                    "longitude": record.longitude,
                     "slug": record.slug,
-                    "name": record.name
                 }
             })
         return JsonResponse(
@@ -65,8 +68,11 @@ def update_record(request, slug):
             return JsonResponse({
                 "success": True,
                 "record": {
+                    "name": record.name,
+                    "record_type": record.record_type.record_type if record.record_type else "",
+                    "latitude": record.latitude,
+                    "longitude": record.longitude,
                     "slug": record.slug,
-                    "name": record.name
                 }
             })
         return JsonResponse(

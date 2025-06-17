@@ -1,3 +1,5 @@
+// crud_modal.js
+
 function openCrudModal(slug) {
     fetch(`/mapper/modal/${slug}/`)
         .then(response => response.text())
@@ -7,10 +9,11 @@ function openCrudModal(slug) {
             modalElement.querySelector(".modal-title").textContent = "Edit Record";
             modalElement.dataset.slug = slug;
             new bootstrap.Modal(modalElement).show();
+
             document.getElementById('saveRecordBtn').onclick = function () {
                 saveRecord(slug);
             };
-            // Show delete button for existing records
+
             const deleteBtn = document.getElementById('deleteRecordBtn');
             if (deleteBtn) {
                 deleteBtn.style.display = '';
@@ -31,18 +34,20 @@ function openCreateModal(initialData = {}) {
             modalElement.querySelector("#modalContent").innerHTML = html;
             modalElement.querySelector(".modal-title").textContent = "Add New Record";
             modalElement.dataset.slug = "";
-            // Pre-fill lat/lng if needed
+
             if (initialData.latitude && initialData.longitude) {
                 const latInput = modalElement.querySelector('[name="latitude"]');
                 const lngInput = modalElement.querySelector('[name="longitude"]');
                 if (latInput) latInput.value = initialData.latitude;
                 if (lngInput) lngInput.value = initialData.longitude;
             }
+
             new bootstrap.Modal(modalElement).show();
+
             document.getElementById('saveRecordBtn').onclick = function () {
                 saveRecord("");
             };
-            // Hide delete button for new records
+
             const deleteBtn = document.getElementById('deleteRecordBtn');
             if (deleteBtn) {
                 deleteBtn.style.display = 'none';
@@ -51,22 +56,60 @@ function openCreateModal(initialData = {}) {
 }
 
 function saveRecord(slug) {
+    console.log(`🟠 Starting saveRecord - Slug: ${slug}`);
+
     const modalElement = document.getElementById("crudModal");
     const form = modalElement.querySelector('form');
     const formData = new FormData(form);
     let url = slug ? `/mapper/modal/${slug}/update/` : '/mapper/add-record/';
+
+    console.log("🟠 Sending request to:", url);
+
     fetch(url, {
         method: 'POST',
         headers: { "X-CSRFToken": getCsrfToken() },
         body: formData,
     })
+    .then(response => {
+        console.log("🟢 Response received:", response);
+        return response.json();
+    })
+    .then(data => {
+        console.log("🟢 Parsed JSON:", data);
+
+        if (data.success) {
+            console.log("✅ Record saved successfully:", data.record);
+            bootstrap.Modal.getInstance(modalElement).hide();
+
+            if (!slug) {
+                console.log("🟢 Adding new marker for:", data.record.name);
+                addNewMarker(data.record);  // 🔥 Ensure marker is added dynamically
+            } else {
+                console.log(`🟢 Updating marker for slug: ${slug} -> ${data.record.slug}`);
+                data.record.old_slug = slug;  // Store old slug before updating
+                updateMarkerPopup(data.record);  // 🔥 Ensure marker updates properly
+            }
+        } else {
+            console.error("🔴 Validation errors:", data.errors);
+            alert('Please correct the form errors.');
+        }
+    })
+    .catch(error => console.error("🔴 Error saving record:", error));
+}
+
+function deleteRecord(slug) {
+    fetch(`/mapper/modal/${slug}/delete/`, {
+        method: 'POST',
+        headers: { "X-CSRFToken": getCsrfToken() },
+    })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
+            const modalElement = document.getElementById("crudModal");
             bootstrap.Modal.getInstance(modalElement).hide();
-            // Optionally refresh map or add marker here
+            removeMarker(slug);  // 🔥 Ensure marker is removed instantly
         } else {
-            alert('Please correct the form errors.');
+            alert('Failed to delete record.');
         }
     });
 }
@@ -81,21 +124,4 @@ function getCsrfToken() {
         }
     }
     return '';
-}
-
-function deleteRecord(slug) {
-    fetch(`/mapper/modal/${slug}/delete/`, {
-        method: 'POST',
-        headers: { "X-CSRFToken": getCsrfToken() },
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            const modalElement = document.getElementById("crudModal");
-            bootstrap.Modal.getInstance(modalElement).hide();
-            // Optionally remove marker from map here
-        } else {
-            alert('Failed to delete record.');
-        }
-    });
 }

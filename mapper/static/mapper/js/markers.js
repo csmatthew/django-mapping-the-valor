@@ -62,3 +62,86 @@ function createMarkers(map, data) {
         }
     });
 }
+
+function addNewMarker(record) {
+    if (!record.latitude || !record.longitude) {
+        console.error("Missing coordinates for new record:", record);
+        return;
+    }
+
+    let name = record.name;
+    if (record.house_type) {
+        name += ` ${record.house_type}`;
+    } else if (record.record_type && record.record_type !== 'Monastery') {
+        name += ` ${record.record_type}`;
+    }
+
+    let popupContent = `<b>${name}</b><br>
+        Record Type: ${record.record_type}<br>
+        Deanery: ${record.deanery}<br>`;
+
+    if (record.religious_order) {
+        popupContent += `Religious Order: ${record.religious_order}<br>`;
+    }
+
+    let marker = L.marker([record.latitude, record.longitude]).bindPopup(popupContent);
+
+    window.markerMap[record.slug] = marker;
+    allMarkers.addLayer(marker);  // 🔥 Add marker immediately
+    map.addLayer(allMarkers);     // 🔥 Refresh map
+
+    // Add modal open on click
+    marker.on('click', function () {
+        openCrudModal(record.slug);
+        console.log(`Opening modal for slug: ${record.slug}`);
+    });
+
+    marker.on('mouseover', function () {
+        marker.openPopup();
+    });
+
+    marker.on('mouseout', function () {
+        marker.closePopup();
+    });
+}
+
+
+function updateMarkerPopup(record) {
+    console.log("🟢 Updating marker popup for:", record.slug);
+
+    // Find the old marker (if exists) and remove it
+    let oldMarker = window.markerMap[record.old_slug]; // Use previous slug if provided
+    if (oldMarker) {
+        console.log(`🟡 Removing old marker for slug: ${record.old_slug}`);
+        allMarkers.removeLayer(oldMarker);
+        delete window.markerMap[record.old_slug];
+    } else {
+        console.warn(`⚠️ Old marker not found for slug: ${record.old_slug}`);
+    }
+
+    // Create a new marker with updated data
+    let name = record.name;
+    if (record.house_type) {
+        name += ` ${record.house_type}`;
+    } else if (record.record_type && record.record_type !== 'Monastery') {
+        name += ` ${record.record_type}`;
+    }
+
+    let popupContent = `<b>${name}</b><br>Record Type: ${record.record_type}<br>Deanery: ${record.deanery}<br>`;
+
+    if (record.religious_order) {
+        popupContent += `Religious Order: ${record.religious_order}<br>`;
+    }
+
+    console.log(`🟢 Creating new marker at [${record.latitude}, ${record.longitude}]`);
+
+    let marker = L.marker([record.latitude, record.longitude]).bindPopup(popupContent);
+    
+    window.markerMap[record.slug] = marker;
+    allMarkers.addLayer(marker); // 🔥 Add new marker to cluster
+    map.addLayer(allMarkers); // 🔥 Refresh map
+
+    console.log(`✅ Marker updated successfully for: ${record.slug}`);
+}
+
+window.updateMarkerPopup = updateMarkerPopup;
