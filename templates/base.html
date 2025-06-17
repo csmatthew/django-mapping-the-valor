@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Mapping the Valor: An interactive map and database of Valor Records.">
+    <meta name="keywords" content="Valor, Mapping, History, Records, Monastery, Deanery, England, Database">
     <title>{% block title %}Mapping the Valor{% endblock title %}</title>
 
     {% load static %}
@@ -17,7 +19,7 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
     {% block additional_css %}
-    {% endblock %}
+    {% endblock additional_css %}
 </head>
 <body>
 
@@ -41,14 +43,14 @@
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <span class="navbar-text text-light">Logged in as {{ user.username }}</span>
+                        <span class="nav-link disabled text-light">Logged in as {{ user.username }}</span>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-light" href="{% url 'account_logout' %}">Logout</a>
                     </li>
                     {% else %}
                     <li class="nav-item">
-                        <span class="navbar-text text-light">Not Logged In</span>
+                        <span class="nav-link disabled text-light">Not Logged In</span>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-light" href="{% url 'account_signup' %}">Create account</a>
@@ -94,6 +96,6 @@
     <script src="{% static 'js/script.js' %}"></script>
     
     {% block additional_scripts %}
-    {% endblock %}
+    {% endblock additional_scripts %}
 </body>
 </html>
