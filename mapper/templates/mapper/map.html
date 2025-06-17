@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
     <!-- Custom Map CSS --> 
     <link rel="stylesheet" href="{% static 'mapper/css/map.css' %}">
-{% endblock %}
+{% endblock additional_css %}
 
 {% block content %}
 <div class="container-fluid pt-5 pb-5 bg-light">
@@ -32,7 +32,7 @@
 
 {% include "mapper/modals/crud_modal.html" %}
 
-{% endblock %}
+{% endblock content %}
 
 {% block additional_scripts %}
     <!-- Custom JS -->
@@ -55,4 +55,4 @@
         const currentUsername = null;
         {% endif %}
     </script>
-{% endblock %}
+{% endblock additional_scripts %}
