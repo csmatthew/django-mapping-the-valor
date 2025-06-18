@@ -1,0 +1,31 @@
+/* Palette */
+:root {
+    --btn-main: #B16351;
+    --btn-main-hover: #875448;
+    --btn-main-active: #BE8F85;
+}
+
+/* General Styles */
+.d-none {
+    display: none !important;
+}
+
+/* Button Styles */
+.btn {
+    border-radius: 0;
+}
+
+.btn-primary {
+    background-color: var(--btn-main);
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: var(--btn-main-hover);
+}
+
+.btn-primary:active,
+.btn-primary.active {
+    background-color: var(--btn-main-active) !important;
+}
+

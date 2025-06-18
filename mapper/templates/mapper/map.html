@@ -13,6 +13,7 @@
 
 {% block content %}
 <div class="container-fluid pt-5 pb-5 bg-light">
+    <div id="map-background-overlay" class="map-background-overlay"></div>
     <div id="map-container">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <div class="map-filter">
@@ -25,6 +26,9 @@
             <div>
                 <button class="btn btn-primary" id="add-record-btn">Add Record</button>
             </div>
+        </div>
+        <div id="map-overlay" class="map-overlay d-none">
+            <span class="map-overlay-text">Click on the map to add a record</span>
         </div>
         <div id="map"></div>
     </div>
