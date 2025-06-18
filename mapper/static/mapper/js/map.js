@@ -42,32 +42,34 @@ function setupFilters(data) {
     const viewAllCheckbox = document.getElementById('view-all-filter');
     const typeCheckboxes = document.querySelectorAll('.record-type-filter');
 
-    // Enable/disable type checkboxes + grey out text
-    function toggleTypeCheckboxes(disable) {
-        typeCheckboxes.forEach(cb => {
-            const label = cb.parentElement;
-            cb.disabled = disable;
-            if (disable) {
-                cb.checked = false;
-                label.classList.add('disabled');
-            } else {
-                label.classList.remove('disabled');
-            }
-        });
-    }
-
-    // Event listeners
+    // When "View All" is changed
     viewAllCheckbox.addEventListener('change', () => {
-        toggleTypeCheckboxes(viewAllCheckbox.checked);
+        if (viewAllCheckbox.checked) {
+            // Uncheck all type checkboxes
+            typeCheckboxes.forEach(cb => cb.checked = false);
+        }
         filterMarkers(data);
     });
 
+    // When any type checkbox is changed
     typeCheckboxes.forEach(cb => {
-        cb.addEventListener('change', () => filterMarkers(data));
+        cb.addEventListener('change', () => {
+            if (cb.checked) {
+                viewAllCheckbox.checked = false;
+            }
+            // If none are checked, re-check "View All"
+            const anyChecked = Array.from(typeCheckboxes).some(cb => cb.checked);
+            if (!anyChecked) {
+                viewAllCheckbox.checked = true;
+            }
+            filterMarkers(data);
+        });
     });
 
     // On load — enforce default states
-    toggleTypeCheckboxes(viewAllCheckbox.checked);
+    if (viewAllCheckbox.checked) {
+        typeCheckboxes.forEach(cb => cb.checked = false);
+    }
     filterMarkers(data);
 }
 
