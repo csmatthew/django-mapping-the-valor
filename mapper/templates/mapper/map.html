@@ -24,7 +24,9 @@
                 <!-- Add more filters as needed -->
             </div>
             <div>
-                <button class="btn btn-primary" id="add-record-btn">Add Record</button>
+                {% if user.is_authenticated %}
+                    <button class="btn btn-primary" id="add-record-btn">Add Record</button>
+                {% endif %}
             </div>
         </div>
         <div id="map-overlay" class="map-overlay d-none">
