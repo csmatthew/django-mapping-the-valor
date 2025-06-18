@@ -11,8 +11,8 @@ document.addEventListener('DOMContentLoaded', function () {
         map.getContainer().style.cursor = 'crosshair';
         addRecordBtn.classList.add('active');
         mapContainer.classList.add('map-editing-border');
-        const mapBackgroundOverlay = document.getElementById('map-background-overlay');
-        if (mapBackgroundOverlay) mapBackgroundOverlay.classList.add('visible'); // Show overlay
+        if (mapOverlay) mapOverlay.classList.remove('d-none'); // Show prompt overlay
+        if (mapBackgroundOverlay) mapBackgroundOverlay.classList.add('visible'); // Optional: show grey overlay
         addRecordBtn.disabled = false;
     }
 
@@ -21,8 +21,8 @@ document.addEventListener('DOMContentLoaded', function () {
         map.getContainer().style.cursor = '';
         addRecordBtn.classList.remove('active');
         mapContainer.classList.remove('map-editing-border');
-        const mapBackgroundOverlay = document.getElementById('map-background-overlay');
-        if (mapBackgroundOverlay) mapBackgroundOverlay.classList.remove('visible'); // Hide overlay
+        if (mapOverlay) mapOverlay.classList.add('d-none'); // Hide prompt overlay
+        if (mapBackgroundOverlay) mapBackgroundOverlay.classList.remove('visible'); // Optional: hide grey overlay
         addRecordBtn.disabled = false;
     }
 
@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 latitude: e.latlng.lat.toFixed(6),
                 longitude: e.latlng.lng.toFixed(6)
             });
+            exitAddMode(); // Hide overlays after click
         }
     });
 
