@@ -10,6 +10,12 @@
     display: none !important;
 }
 
+.site-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
 /* Button Styles */
 .btn {
     border-radius: 0;
@@ -27,5 +33,10 @@
 .btn-primary:active,
 .btn-primary.active {
     background-color: var(--btn-main-active) !important;
+}
+
+/* Footer Styles */
+footer {
+    /* Optional: style your footer */
 }
 
