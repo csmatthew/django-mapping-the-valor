@@ -111,7 +111,7 @@ function deleteRecord(slug) {
             const modalElement = document.getElementById("crudModal");
             bootstrap.Modal.getInstance(modalElement).hide();
             removeMarker(slug);  // Ensure marker is removed instantly
-            showNotification('Record deleted successfully!'); // Show deletion notification
+            showNotification('Record deleted successfully!', 'success'); // Show deletion notification
         } else {
             alert('Failed to delete record.');
         }

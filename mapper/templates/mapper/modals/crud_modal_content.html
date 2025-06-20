@@ -23,4 +23,9 @@
             {% endif %}
         {% endfor %}
     {% endif %}
+    {% if can_delete %}
+        <div class="text-end mt-3">
+            <button id="deleteRecordBtn" class="btn btn-danger">Delete</button>
+        </div>
+    {% endif %}
 </form>
