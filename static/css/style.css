@@ -43,3 +43,12 @@
     background-color: var(--btn-main-active) !important;
 }
 
+/* Footer Styles */
+.footer a {
+    text-decoration: none !important;
+}
+.footer a:visited,
+.footer a:active,
+.footer a:focus {
+    color: inherit !important;
+}
