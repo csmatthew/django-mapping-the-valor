@@ -4,7 +4,7 @@ from valor_records.models import ValorRecord
 
 
 def about_view(request):
-    return render(request, "about.html")
+    return render(request, "core/about.html")
 
 
 def valorrecord_list(request):
