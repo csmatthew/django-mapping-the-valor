@@ -1,6 +1,6 @@
 # Mapping the Valor - Digitising the Valor Ecclesiasticus
 
-<img width="612" alt="responsive screens landing page for the Gifting Genie app" src="readme_docs/images/macbook.png">
+<img width="612" alt="mockup of app on laptop" src="readme_docs/images/macbook.png">
 
 link to Heroku (live page)
 > [View live project here on Heroku](https://django-mapping-the-valor-2bf69fd90b32.herokuapp.com/)
@@ -141,7 +141,7 @@ Remaining untranslated from its 16th century Latin, and printed in the 19th cent
 * The main model is `ValorRecord`, which includes fields for name, record type, house type, deanery, valuation, dedication, religious order, status, latitude, longitude, and source references.
 * User authentication uses Django's built-in user model.
 
-**ERD of models Gifting-Genie**
+**ERD of model for Mapping The Valor**
 
  ![Mapping_The_Valor_ERD_screenshot](readme_docs/images/ERD.png)
 
