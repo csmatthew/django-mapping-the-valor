@@ -26,7 +26,9 @@
                 <label><input type="checkbox" class="record-type-filter" value="Monastery"> Monastery</label>
                 <label><input type="checkbox" class="record-type-filter" value="Rectory"> Rectory</label>
                 <label><input type="checkbox" class="record-type-filter" value="Collegiate"> Collegiate</label>
-                <label><input type="checkbox" id="show-own-records"> Show only my records</label>
+                {% if user.is_authenticated %}
+                    <label><input type="checkbox" id="show-own-records"> Show only my records</label>
+                {% endif %}
             </div>
             <div>
                 {% if user.is_authenticated %}
