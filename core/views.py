@@ -1,5 +1,5 @@
 from django.core.paginator import Paginator
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from valor_records.models import ValorRecord
 
 
@@ -18,3 +18,8 @@ def valorrecord_list(request):
         'core/valorrecord_list.html',
         {'page_obj': page_obj}
     )
+
+
+def valorrecord_detail(request, slug):
+    record = get_object_or_404(ValorRecord, slug=slug)
+    return render(request, "core/valorrecord_detail.html", {"record": record})
