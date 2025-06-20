@@ -1,4 +1,3 @@
-from django import forms
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
@@ -50,7 +49,10 @@ def add_record(request):
                 "success": True,
                 "record": {
                     "name": record.name,
-                    "record_type": record.record_type.record_type if record.record_type else "",
+                    "record_type": (
+                        record.record_type.record_type
+                        if record.record_type else ""
+                    ),
                     "latitude": record.latitude,
                     "longitude": record.longitude,
                     "slug": record.slug,
@@ -77,7 +79,10 @@ def update_record(request, slug):
                 "success": True,
                 "record": {
                     "name": record.name,
-                    "record_type": record.record_type.record_type if record.record_type else "",
+                    "record_type": (
+                        record.record_type.record_type
+                        if record.record_type else ""
+                    ),
                     "latitude": record.latitude,
                     "longitude": record.longitude,
                     "slug": record.slug,
