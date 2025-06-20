@@ -3,7 +3,7 @@
 <img width="612" alt="responsive screens landing page for the Gifting Genie app" src="readme_docs/images/macbook.png">
 
 link to Heroku (live page)
-> [View live project here on Heroku](https://mapping-the-valor-a17b7cc98edf.herokuapp.com/)
+> [View live project here on Heroku](https://django-mapping-the-valor-2bf69fd90b32.herokuapp.com/)
 
 Github link 
 > [view Github repo here](https://github.com/csmatthew/django-mapping-the-valor)
