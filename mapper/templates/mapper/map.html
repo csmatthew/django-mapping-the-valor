@@ -15,13 +15,18 @@
 <div class="container-fluid pt-5 pb-5 bg-light">
     <div id="map-background-overlay" class="map-background-overlay"></div>
     <div id="map-container">
+        <div id="map-loading-overlay" class="map-loading-overlay hidden">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading Valor Records...</span>
+        </div>
+    </div>
         <div class="d-flex justify-content-between align-items-center mb-3">
             <div class="map-filter">
                 <label><input type="checkbox" id="view-all-filter" value="All" checked> View All</label>
                 <label><input type="checkbox" class="record-type-filter" value="Monastery"> Monastery</label>
                 <label><input type="checkbox" class="record-type-filter" value="Rectory"> Rectory</label>
                 <label><input type="checkbox" class="record-type-filter" value="Collegiate"> Collegiate</label>
-                <!-- Add more filters as needed -->
+                <label><input type="checkbox" id="show-own-records"> Show only my records</label>
             </div>
             <div>
                 {% if user.is_authenticated %}
@@ -37,7 +42,6 @@
 </div>
 
 <div id="notification-area"></div>
-
 {% include "mapper/modals/crud_modal.html" %}
 
 {% endblock content %}
