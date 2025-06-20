@@ -3,6 +3,14 @@
 // Make markerMap globally accessible
 window.markerMap = {};
 
+// Define a custom icon for the user's own records
+const userIcon = L.icon({
+    iconUrl: 'https://res.cloudinary.com/dqm93egis/image/upload/v1750420149/user-marker_hoso5d.png',
+    iconSize: [25, 41],
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -32]
+});
+
 // Function to create markers and add them to the global marker cluster group
 function createMarkers(map, data) {
 
@@ -31,9 +39,11 @@ function createMarkers(map, data) {
                 popupContent += `Religious Order: ${record.religious_order}<br>`;
             }
 
-            // Create the marker
-            let marker = L.marker([record.latitude, record.longitude])
-                .bindPopup(popupContent);
+            // Use a different icon if this is the user's own record
+            let marker = L.marker(
+                [record.latitude, record.longitude],
+                record.is_owner ? { icon: userIcon } : undefined
+            ).bindPopup(popupContent);
 
             // Store the marker globally by slug
             window.markerMap[record.slug] = marker;
@@ -80,8 +90,8 @@ function addNewMarker(record) {
     let marker = L.marker([record.latitude, record.longitude]).bindPopup(popupContent);
 
     window.markerMap[record.slug] = marker;
-    allMarkers.addLayer(marker);  // 🔥 Add marker immediately
-    map.addLayer(allMarkers);     // 🔥 Refresh map
+    allMarkers.addLayer(marker);  // Add marker immediately
+    map.addLayer(allMarkers);     // Refresh map
 
     // Add modal open on click
     marker.on('click', function () {

@@ -128,6 +128,7 @@ def delete_record(request, slug):
 
 
 def valor_records_json(request):
+    user = request.user if request.user.is_authenticated else None
     records = ValorRecord.objects.all()
     data = [
         {
@@ -145,6 +146,7 @@ def valor_records_json(request):
                 str(r.religious_order) if r.religious_order else ""
             ),
             "house_type": str(r.house_type) if r.house_type else "",
+            "is_owner": user and r.created_by_id == user.id,
         }
         for r in records
     ]

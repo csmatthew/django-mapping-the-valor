@@ -60,9 +60,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'crispy_forms',
     'crispy_bootstrap5',
-    'django_summernote',
     'cloudinary',
-    'django_extensions',  # Enables extra developer utilities
+    'django_extensions',
     # site apps
     'core',
     'valor_records',
