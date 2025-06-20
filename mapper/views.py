@@ -18,7 +18,11 @@ def crud_modal(request, slug):
     return render(
         request,
         "mapper/modals/crud_modal_content.html",
-        {"form": form, "record": record},
+        {
+            "form": form,
+            "record": record,
+            "is_authenticated": request.user.is_authenticated,
+        },
     )
 
 
@@ -28,7 +32,11 @@ def crud_modal_create(request):
     return render(
         request,
         "mapper/modals/crud_modal_content.html",
-        {"form": form, "record": None},
+        {
+            "form": form,
+            "record": None,
+            "is_authenticated": request.user.is_authenticated,
+        },
     )
 
 

@@ -1,5 +1,28 @@
 <form method="post" id="add-record-form">
     {% csrf_token %}
     {{ form.non_field_errors }}
-    {{ form.as_p }}
+    {% if is_authenticated %}
+        {% for field in form %}
+            {% if field.value %}
+                <div class="mb-3">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {{ field.errors }}
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        {% for field in form %}
+            {% if field.value %}
+                <div class="mb-3">
+                    <label class="form-label">{{ field.label }}</label>
+                    {% if field.field.choices %}
+                        <input class="form-control" value="{% for val, label in field.field.choices %}{% if val == field.value %}{{ label }}{% endif %}{% endfor %}" readonly disabled>
+                    {% else %}
+                        <input class="form-control" value="{{ field.value|default_if_none:'' }}" readonly disabled>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
 </form>
