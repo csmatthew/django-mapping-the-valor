@@ -5,7 +5,7 @@ from mapper.views import map_view
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', map_view, name='home'),
-    path('', include('core.urls')),  # <-- This will include /about/
+    path('', include('core.urls')),
     path('mapper/', include('mapper.urls')),
     path('accounts/', include('allauth.urls')),
 ]
