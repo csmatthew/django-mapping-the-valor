@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}{{ record.name }} {{ record.record_type }} | Valor Record{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h2 class="card-title mb-3">
+                        {{ record.name }}{% if record.house_type %} {{ record.house_type }}{% elif record.record_type and record.record_type != "Monastery" %} {{ record.record_type }}{% endif %}
+                    </h2>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item"><strong>Record Type:</strong> {{ record.record_type }}</li>
+                        <li class="list-group-item"><strong>Deanery:</strong> {{ record.deanery }}</li>
+                        <li class="list-group-item"><strong>Valuation:</strong> {{ record.valuation }}</li>
+                        {% if record.dedication %}
+                        <li class="list-group-item"><strong>Dedication:</strong> {{ record.dedication }}</li>
+                        {% endif %}
+                        {% if record.house_type %}
+                        <li class="list-group-item"><strong>House Type:</strong> {{ record.house_type }}</li>
+                        {% endif %}
+                        {% if record.religious_order %}
+                        <li class="list-group-item"><strong>Religious Order:</strong> {{ record.religious_order }}</li>
+                        {% endif %}
+                        {% if record.status %}
+                        <li class="list-group-item"><strong>Status:</strong> {{ record.status }}</li>
+                        {% endif %}
+                        {% if record.latitude and record.longitude %}
+                        <li class="list-group-item"><strong>Location:</strong> {{ record.latitude }}, {{ record.longitude }}</li>
+                        {% endif %}
+                        {% if record.source_ref_vol or record.source_ref_page %}
+                        <li class="list-group-item">
+                            <strong>Source Reference:</strong>
+                            {% if record.source_ref_vol %}Vol {{ record.source_ref_vol }}{% endif %}
+                            {% if record.source_ref_page %}p. {{ record.source_ref_page }}{% endif %}
+                        </li>
+                        {% endif %}
+                    </ul>
+                    <a href="{% url 'valorrecord_list' %}" class="btn btn-secondary">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
