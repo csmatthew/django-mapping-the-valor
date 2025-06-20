@@ -12,7 +12,6 @@ function createMarkers(map, data) {
     data.forEach(record => {
         if (record.latitude && record.longitude) {
 
-
             // Construct the name and popup content
             let name;
             if (record.record_type === 'Monastery' && record.house_type) {
@@ -32,7 +31,6 @@ function createMarkers(map, data) {
                 popupContent += `Religious Order: ${record.religious_order}<br>`;
             }
 
-
             // Create the marker
             let marker = L.marker([record.latitude, record.longitude])
                 .bindPopup(popupContent);
@@ -43,7 +41,6 @@ function createMarkers(map, data) {
             // Add click event to show modal when marker is selected
             marker.on('click', function () {
                 openCrudModal(record.slug); // Call the function in crud_modal.js
-                console.log(`Opening modal for slug: ${record.slug}`);
             });
 
             // Optional: Add events for interactivity
@@ -55,14 +52,13 @@ function createMarkers(map, data) {
                 marker.closePopup();
             });
         } else {
-            console.warn(`Skipping ${record.name}: Missing coordinates`);
+            // Skipping marker creation due to missing coordinates
         }
     });
 }
 
 function addNewMarker(record) {
     if (!record.latitude || !record.longitude) {
-        console.error("Missing coordinates for new record:", record);
         return;
     }
 
@@ -90,7 +86,6 @@ function addNewMarker(record) {
     // Add modal open on click
     marker.on('click', function () {
         openCrudModal(record.slug);
-        console.log(`Opening modal for slug: ${record.slug}`);
     });
 
     marker.on('mouseover', function () {
@@ -102,18 +97,12 @@ function addNewMarker(record) {
     });
 }
 
-
 function updateMarkerPopup(record) {
-    console.log("🟢 Updating marker popup for:", record.slug);
-
     // Find the old marker (if exists) and remove it
     let oldMarker = window.markerMap[record.old_slug]; // Use previous slug if provided
     if (oldMarker) {
-        console.log(`🟡 Removing old marker for slug: ${record.old_slug}`);
         allMarkers.removeLayer(oldMarker);
         delete window.markerMap[record.old_slug];
-    } else {
-        console.warn(`⚠️ Old marker not found for slug: ${record.old_slug}`);
     }
 
     // Create a new marker with updated data
@@ -130,15 +119,11 @@ function updateMarkerPopup(record) {
         popupContent += `Religious Order: ${record.religious_order}<br>`;
     }
 
-    console.log(`🟢 Creating new marker at [${record.latitude}, ${record.longitude}]`);
-
     let marker = L.marker([record.latitude, record.longitude]).bindPopup(popupContent);
     
     window.markerMap[record.slug] = marker;
-    allMarkers.addLayer(marker); // 🔥 Add new marker to cluster
-    map.addLayer(allMarkers); // 🔥 Refresh map
-
-    console.log(`✅ Marker updated successfully for: ${record.slug}`);
+    allMarkers.addLayer(marker); // Add new marker to cluster
+    map.addLayer(allMarkers); // Refresh map
 }
 
 window.updateMarkerPopup = updateMarkerPopup;
