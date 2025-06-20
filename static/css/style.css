@@ -4,6 +4,7 @@
     --btn-main-hover: #875448;
     --btn-main-active: #BE8F85;
     --primary: #B16351;
+    --secondary: #53322a;
 }
 
 /* General Styles */
@@ -51,4 +52,19 @@
 .footer a:active,
 .footer a:focus {
     color: inherit !important;
+}
+
+/* Social media icon hover effect */
+.footer a .fab {
+    transition: transform 0.2s;
+}
+
+.footer a:hover .fab,
+.footer a:focus .fab {
+    transform: scale(1.2);
+}
+
+.navbar,
+.footer {
+    background-color: var(--secondary) !important;
 }

@@ -137,7 +137,14 @@ def valor_records_json(request):
             "deanery": r.deanery.deanery_name if r.deanery else "",
             "latitude": r.latitude,
             "longitude": r.longitude,
-            # Add other fields as needed
+            "valuation": (
+                r.valuation.get_formatted_value()
+                if hasattr(r, "valuation") and r.valuation else "N/A"
+            ),
+            "religious_order": (
+                str(r.religious_order) if r.religious_order else ""
+            ),
+            "house_type": str(r.house_type) if r.house_type else "",
         }
         for r in records
     ]
