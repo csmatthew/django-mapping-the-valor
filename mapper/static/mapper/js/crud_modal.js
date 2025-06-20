@@ -83,15 +83,16 @@ function saveRecord(slug) {
         return response.json();
     })
     .then(data => {
-
         if (data.success) {
             bootstrap.Modal.getInstance(modalElement).hide();
 
+            showNotification("Record saved successfully!", "success");
+
             if (!slug) {
-                addNewMarker(data.record);  // Ensure marker is added dynamically
+                addNewMarker(data.record);
             } else {
-                data.record.old_slug = slug;  // Store old slug before updating
-                updateMarkerPopup(data.record);  // Ensure marker updates properly
+                data.record.old_slug = slug;
+                updateMarkerPopup(data.record);
             }
         } else {
             alert('Please correct the form errors.');
@@ -110,6 +111,7 @@ function deleteRecord(slug) {
             const modalElement = document.getElementById("crudModal");
             bootstrap.Modal.getInstance(modalElement).hide();
             removeMarker(slug);  // Ensure marker is removed instantly
+            showNotification('Record deleted successfully!'); // Show deletion notification
         } else {
             alert('Failed to delete record.');
         }
@@ -126,4 +128,19 @@ function getCsrfToken() {
         }
     }
     return '';
+}
+
+function showNotification(message, type="success") {
+    const area = document.getElementById('notification-area');
+    if (!area) return;
+    area.innerHTML = `
+        <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    `;
+    // Auto-dismiss after 3 seconds
+    setTimeout(() => {
+        area.innerHTML = '';
+    }, 3000);
 }
