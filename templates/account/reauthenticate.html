@@ -10,7 +10,7 @@
 
 <p>{% blocktranslate %}To safeguard the security of your account, please enter your password:{% endblocktranslate %}</p>
 
-<form class="reauthenticate" method="POST" action="{% url 'account_reauthenticate' %}">
+<form class="reauthenticate" method="post" action="{% url 'account_reauthenticate' %}">
   {% csrf_token %}
   {{ form.as_p }}
   {% if redirect_field_value %}
