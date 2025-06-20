@@ -3,13 +3,11 @@
     {{ form.non_field_errors }}
     {% if is_authenticated %}
         {% for field in form %}
-            {% if field.value %}
-                <div class="mb-3">
-                    {{ field.label_tag }}
-                    {{ field }}
-                    {{ field.errors }}
-                </div>
-            {% endif %}
+            <div class="mb-3">
+                {{ field.label_tag }}
+                {{ field }}
+                {{ field.errors }}
+            </div>
         {% endfor %}
     {% else %}
         {% for field in form %}
