@@ -14,16 +14,13 @@ function createMarkers(map, data) {
 
 
             // Construct the name and popup content
-            let name = record.name;
-
-            // Always append house_type if it exists
-            if (record.house_type) {
-                name += ` ${record.house_type}`;
-            }
-
-            // If no house_type and record_type exists, append the record_type (but not if it's 'Monastery')
-            else if (record.record_type && record.record_type !== 'Monastery') {
-                name += ` ${record.record_type}`;
+            let name;
+            if (record.record_type === 'Monastery' && record.house_type) {
+                name = `${record.name} ${record.house_type}`;
+            } else if (record.record_type) {
+                name = `${record.name} ${record.record_type}`;
+            } else {
+                name = record.name;
             }
 
             let popupContent = `<b>${name}</b><br>

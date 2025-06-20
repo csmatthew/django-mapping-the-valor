@@ -6,7 +6,12 @@ function openCrudModal(slug) {
         .then(html => {
             const modalElement = document.getElementById("crudModal");
             modalElement.querySelector("#modalContent").innerHTML = html;
-            modalElement.querySelector(".modal-title").textContent = "Edit Record";
+            // Set modal title based on authentication
+            if (window.isUserAuthenticated) {
+                modalElement.querySelector(".modal-title").textContent = "Edit Record";
+            } else {
+                modalElement.querySelector(".modal-title").textContent = "View Record";
+            }
             modalElement.dataset.slug = slug;
             new bootstrap.Modal(modalElement).show();
 
@@ -22,6 +27,13 @@ function openCrudModal(slug) {
                         deleteRecord(slug);
                     }
                 };
+            }
+
+            // After loading modal HTML in openCrudModal
+            if (!window.isUserAuthenticated) {
+                document.getElementById('saveRecordBtn').style.display = 'none';
+                const deleteBtn = document.getElementById('deleteRecordBtn');
+                if (deleteBtn) deleteBtn.style.display = 'none';
             }
         });
 }

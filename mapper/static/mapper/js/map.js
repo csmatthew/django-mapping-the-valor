@@ -1,12 +1,23 @@
 let map; // Define map variable globally
 let allMarkers = L.markerClusterGroup(); // Marker cluster group
 
+function getQueryParams() {
+    const params = {};
+    window.location.search.substring(1).split("&").forEach(function (pair) {
+        if (pair) {
+            var parts = pair.split("=");
+            params[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1] || "");
+        }
+    });
+    return params;
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     var mapContainer = document.getElementById('map');
 
     if (mapContainer && !mapContainer._leaflet_map) {
         map = L.map('map', {
-            center: [53.5, -2.25], // Centered on Manchester
+            center: [53.5, -2.25], // Default center
             zoom: 10,
             minZoom: 6,
             maxBounds: [
@@ -26,6 +37,13 @@ document.addEventListener('DOMContentLoaded', function () {
         L.control.zoom({
             position: 'bottomright'
         }).addTo(map);
+
+        // Center map if lat/lng/zoom are in query params
+        const params = getQueryParams();
+        if (params.lat && params.lng) {
+            const zoom = params.zoom ? parseInt(params.zoom) : 15;
+            map.setView([parseFloat(params.lat), parseFloat(params.lng)], zoom);
+        }
 
         // Fetch Valor Records and add them to the map
         fetch('/mapper/valor-records/')
