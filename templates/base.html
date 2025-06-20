@@ -71,6 +71,9 @@
                                     >About</a
                                 >
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" href="{% url 'valorrecord_list' %}">Browse Records</a>
+                            </li>
                         </ul>
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                             {% if user.is_authenticated %}
@@ -118,8 +121,9 @@
 
             <footer class="footer mt-auto py-3 bg-dark">
                 <p class="m-0 text-center text-light">
-                    {% block copyright %} MMXXV Christopher Matthew {% endblock
-                    copyright %}
+                    {% block copyright %} 
+                    MMXXV Christopher Matthew 
+                    {% endblock copyright %}
                 </p>
                 <p class="m-0 text-center text-light">
                     Follow us:
