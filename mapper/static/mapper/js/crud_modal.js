@@ -68,14 +68,11 @@ function openCreateModal(initialData = {}) {
 }
 
 function saveRecord(slug) {
-    console.log(`🟠 Starting saveRecord - Slug: ${slug}`);
 
     const modalElement = document.getElementById("crudModal");
     const form = modalElement.querySelector('form');
     const formData = new FormData(form);
     let url = slug ? `/mapper/modal/${slug}/update/` : '/mapper/add-record/';
-
-    console.log("🟠 Sending request to:", url);
 
     fetch(url, {
         method: 'POST',
@@ -83,30 +80,23 @@ function saveRecord(slug) {
         body: formData,
     })
     .then(response => {
-        console.log("🟢 Response received:", response);
         return response.json();
     })
     .then(data => {
-        console.log("🟢 Parsed JSON:", data);
 
         if (data.success) {
-            console.log("✅ Record saved successfully:", data.record);
             bootstrap.Modal.getInstance(modalElement).hide();
 
             if (!slug) {
-                console.log("🟢 Adding new marker for:", data.record.name);
-                addNewMarker(data.record);  // 🔥 Ensure marker is added dynamically
+                addNewMarker(data.record);  // Ensure marker is added dynamically
             } else {
-                console.log(`🟢 Updating marker for slug: ${slug} -> ${data.record.slug}`);
                 data.record.old_slug = slug;  // Store old slug before updating
-                updateMarkerPopup(data.record);  // 🔥 Ensure marker updates properly
+                updateMarkerPopup(data.record);  // Ensure marker updates properly
             }
         } else {
-            console.error("🔴 Validation errors:", data.errors);
             alert('Please correct the form errors.');
         }
     })
-    .catch(error => console.error("🔴 Error saving record:", error));
 }
 
 function deleteRecord(slug) {
@@ -119,7 +109,7 @@ function deleteRecord(slug) {
         if (data.success) {
             const modalElement = document.getElementById("crudModal");
             bootstrap.Modal.getInstance(modalElement).hide();
-            removeMarker(slug);  // 🔥 Ensure marker is removed instantly
+            removeMarker(slug);  // Ensure marker is removed instantly
         } else {
             alert('Failed to delete record.');
         }
