@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_POST
 from valor_records.models import ValorRecord
@@ -13,6 +13,14 @@ def map_view(request):
 @csrf_protect
 def crud_modal(request, slug):
     record = get_object_or_404(ValorRecord, slug=slug)
+    can_delete = (
+        request.user.is_authenticated
+        and (
+            record.created_by == request.user
+            or request.user.is_staff
+            or request.user.is_superuser
+        )
+    )
     form = ValorRecordForm(instance=record)
     return render(
         request,
@@ -21,6 +29,7 @@ def crud_modal(request, slug):
             "form": form,
             "record": record,
             "is_authenticated": request.user.is_authenticated,
+            "can_delete": can_delete,
         },
     )
 
@@ -44,7 +53,8 @@ def add_record(request):
     if request.method == "POST":
         form = ValorRecordForm(request.POST)
         if form.is_valid():
-            record = form.save()
+            record = form.save(commit=False)
+            record.save(user=request.user)
             return JsonResponse({
                 "success": True,
                 "record": {
@@ -74,7 +84,8 @@ def update_record(request, slug):
     if request.method == "POST":
         form = ValorRecordForm(request.POST, instance=record)
         if form.is_valid():
-            record = form.save()
+            record = form.save(commit=False)
+            record.save(user=request.user)
             return JsonResponse({
                 "success": True,
                 "record": {
@@ -102,6 +113,16 @@ def update_record(request, slug):
 @require_POST
 def delete_record(request, slug):
     record = get_object_or_404(ValorRecord, slug=slug)
+    if (
+        not request.user.is_authenticated or (
+            record.created_by != request.user
+            and not request.user.is_staff
+            and not request.user.is_superuser
+        )
+    ):
+        return HttpResponseForbidden(
+            "You do not have permission to delete this record."
+        )
     record.delete()
     return JsonResponse({"success": True})
 

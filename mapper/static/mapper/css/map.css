@@ -51,7 +51,7 @@
 }
 
 .map-editing-border {
-    outline: 6px solid #ff40df; /* Use outline instead of border */
+    outline: 4px solid var(--primary);
     outline-offset: 0px;        /* Optional: aligns the outline with the edge */
     transition: outline 0.2s;
 }

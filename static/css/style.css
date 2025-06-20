@@ -3,6 +3,7 @@
     --btn-main: #B16351;
     --btn-main-hover: #875448;
     --btn-main-active: #BE8F85;
+    --primary: #B16351;
 }
 
 /* General Styles */
@@ -14,6 +15,13 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+}
+
+#notification-area {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    z-index: 2000;
 }
 
 /* Button Styles */
@@ -33,10 +41,5 @@
 .btn-primary:active,
 .btn-primary.active {
     background-color: var(--btn-main-active) !important;
-}
-
-/* Footer Styles */
-footer {
-    /* Optional: style your footer */
 }
 

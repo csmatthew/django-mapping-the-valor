@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     const addRecordBtn = document.getElementById('add-record-btn');
     let isAddingRecord = false;
+    let isAwaitingLocation = false;
     const mapContainer = document.getElementById('map-container');
     const mapOverlay = document.getElementById('map-overlay');
     const crudModal = document.getElementById('crudModal');
@@ -8,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function enterAddMode() {
         isAddingRecord = true;
+        isAwaitingLocation = false;
         map.getContainer().style.cursor = 'crosshair';
         addRecordBtn.classList.add('active');
         mapContainer.classList.add('map-editing-border');
@@ -18,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function exitAddMode() {
         isAddingRecord = false;
+        isAwaitingLocation = false;
         map.getContainer().style.cursor = '';
         addRecordBtn.classList.remove('active');
         mapContainer.classList.remove('map-editing-border');
@@ -37,12 +40,19 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     map.on('click', function (e) {
-        if (isAddingRecord) {
+        if (isAddingRecord && !isAwaitingLocation) {
+            // First click: indicate to user to now select the location
+            isAwaitingLocation = true;
+            if (mapOverlay) mapOverlay.textContent = "Click the map to set the record location.";
+            return;
+        }
+        if (isAddingRecord && isAwaitingLocation) {
+            // Second click: open modal and exit add mode after modal closes
             openCreateModal({
                 latitude: e.latlng.lat.toFixed(6),
                 longitude: e.latlng.lng.toFixed(6)
             });
-            exitAddMode(); // Hide overlays after click
+            // Do not exitAddMode() here; let modal close handler do it
         }
     });
 
